@@ -1,0 +1,25 @@
+{
+    "name": "lagdo/jaxon-supervisor",
+    "type": "library",
+    "description": "Supervisor dashboard based on the Jaxon Ajax library",
+    "authors": [
+        {"name": "Thierry Feuzeu"}
+    ],
+    "homepage": "https://github.com/lagdo/jaxon-supervisor",
+    "license": "BSD-3-Clause",
+    "keywords": ["Supervisor", "Dashboard", "Jaxon", "Ajax"],
+    "support": {
+        "issues": "https://github.com/lagdo/jaxon-supervisor/issues",
+        "source": "https://github.com/lagdo/jaxon-supervisor"
+    },
+    "require": {
+        "jaxon-php/jaxon-core": "^3.1",
+        "jaxon-php/jaxon-latte": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lagdo\\Supervisor\\": "src/",
+            "Lagdo\\Supervisor\\Ajax\\": "ajax/"
+        }
+    }
+}
