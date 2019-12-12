@@ -8,6 +8,15 @@ This package allows to insert a dashboard for Supervisor into an existing PHP ap
 Thanks to the [Jaxon library](https://www.jaxon-php.org), it installs and runs in a page of the application, which can be loaded with an HTTP or an Ajax request.
 All its operations are performed with Ajax requests.
 
+Features
+--------
+
+- Show the processes on Supervisor servers with status and running time.
+- Start, restart or stop a process on a server.
+- Start, restart or stop all the processes on a server.
+- Start or stop refresh timer.
+- Trigger refresh.
+
 Documentation
 -------------
 
@@ -40,9 +49,9 @@ Documentation
 
 4. In the page that displays the dashboard, insert its HTML code with a call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getHtml()`. Two cases are then possible.
 
-- If the dashboard is displayed on a dedicated page, make a call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->ready()` when loading the page.
+    - If the dashboard is displayed on a dedicated page, make a call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->ready()` when loading the page.
 
-- If the dashboard is loaded with an Ajax request in a page already displayed, execute the javascript code returned the call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getReadyScript()` when loading the page.
+    - If the dashboard is loaded with an Ajax request in a page already displayed, execute the javascript code returned the call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getReadyScript()` when loading the page.
 
 Remarques
 ---------
