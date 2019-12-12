@@ -14,7 +14,11 @@
     },
     "require": {
         "jaxon-php/jaxon-core": "^3.1",
-        "jaxon-php/jaxon-latte": "^3.0"
+        "jaxon-php/jaxon-latte": "^3.0",
+        "supervisorphp/supervisor": "^3.0",
+        "lstrojny/fxmlrpc": "0.10.0",
+        "php-http/guzzle6-adapter": "*",
+        "egeloen/http-adapter": "*"
     },
     "autoload": {
         "psr-4": {
