@@ -53,8 +53,8 @@ Documentation
 
     - If the dashboard is loaded with an Ajax request in a page already displayed, execute the javascript code returned the call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getReadyScript()` when loading the page.
 
-Remarques
----------
+Notes
+-----
 
 The HTML code of the package uses the [Bootstrap](https://getbootstrap.com/) CSS framework, qui which must also be included in the page.
 It is entirely contained in a `<div class="col-md-12">` tag.
