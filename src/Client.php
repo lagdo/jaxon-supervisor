@@ -29,13 +29,13 @@ class Client
         $httpClient = \key_exists('auth', $serverOptions) ?
             new HttpClient(['auth' => $serverOptions['auth']]) : new HttpClient();
         // Pass the url (null) and the guzzle client to the XmlRpc Client
-        $this->rpcClient = new RpcClient(null,
+        $rpcClient = new RpcClient(
+            $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2',
             new HttpAdapterTransport(new Guzzle6HttpAdapter($httpClient))
         );
         // Pass the client to the connector
         // See the full list of connectors bellow
-        $connector = new XmlRpc($this->rpcClient);
-        return new Supervisor($connector);
+        return new Supervisor(new XmlRpc($rpcClient));
     }
 
     /**
@@ -47,8 +47,6 @@ class Client
      */
     public function getVersion(array $serverOptions)
     {
-        $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
-        $this->rpcClient->setUri($host);
         return $this->supervisor($serverOptions)->getSupervisorVersion();
     }
 
@@ -61,8 +59,6 @@ class Client
      */
     public function getProcesses(array $serverOptions)
     {
-        $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
-        $this->rpcClient->setUri($host);
         $processes = $this->supervisor($serverOptions)->getAllProcessInfo();
         foreach($processes as $key => $processInfo)
         {
@@ -89,8 +85,6 @@ class Client
      */
     public function startAllProcesses(array $serverOptions)
     {
-        $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
-        $this->rpcClient->setUri($host);
         $this->supervisor($serverOptions)->startAllProcesses($serverOptions['wait']);
     }
 
@@ -103,8 +97,6 @@ class Client
      */
     public function stopAllProcesses(array $serverOptions)
     {
-        $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
-        $this->rpcClient->setUri($host);
         $this->supervisor($serverOptions)->stopAllProcesses($serverOptions['wait']);
     }
 
@@ -117,8 +109,6 @@ class Client
      */
     public function restartAllProcesses(array $serverOptions)
     {
-        $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
-        $this->rpcClient->setUri($host);
         $supervisor = $this->supervisor($serverOptions);
         $supervisor->stopAllProcesses($serverOptions['wait']);
         $supervisor->startAllProcesses($serverOptions['wait']);
@@ -134,8 +124,6 @@ class Client
      */
     public function startProcess(array $serverOptions, $process)
     {
-        $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
-        $this->rpcClient->setUri($host);
         $this->supervisor($serverOptions)->startProcess($process, $serverOptions['wait']);
     }
 
@@ -149,8 +137,6 @@ class Client
      */
     public function stopProcess(array $serverOptions, $process)
     {
-        $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
-        $this->rpcClient->setUri($host);
         $this->supervisor($serverOptions)->stopProcess($process, $serverOptions['wait']);
     }
 
@@ -164,8 +150,6 @@ class Client
      */
     public function restartProcess(array $serverOptions, $process)
     {
-        $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
-        $this->rpcClient->setUri($host);
         $supervisor = $this->supervisor($serverOptions);
         $supervisor->stopProcess($process, $serverOptions['wait']);
         $supervisor->startProcess($process, $serverOptions['wait']);
