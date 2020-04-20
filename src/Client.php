@@ -67,7 +67,7 @@ class Client
             $processInfo['uptime'] = '';
             if(($pos = \strpos($processInfo['description'], 'uptime ')) !== false)
             {
-                $processInfo['uptime'] = \substr($processInfo['description'], $pos + strlen('uptime '));
+                $processInfo['uptime'] = \substr($processInfo['description'], $pos + \strlen('uptime '));
             }
 
             $processes[$key] = new Process($processInfo);
@@ -86,7 +86,7 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $this->supervisor->startAllProcesses();
+        $this->supervisor->startAllProcesses($serverOptions['wait']);
     }
 
     /**
@@ -100,7 +100,7 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $this->supervisor->stopAllProcesses();
+        $this->supervisor->stopAllProcesses($serverOptions['wait']);
     }
 
     /**
@@ -114,8 +114,8 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $this->supervisor->stopAllProcesses();
-        $this->supervisor->startAllProcesses();
+        $this->supervisor->stopAllProcesses($serverOptions['wait']);
+        $this->supervisor->startAllProcesses($serverOptions['wait']);
     }
 
     /**
@@ -130,7 +130,7 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $this->supervisor->startProcess($process);
+        $this->supervisor->startProcess($process, $serverOptions['wait']);
     }
 
     /**
@@ -145,7 +145,7 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $this->supervisor->stopProcess($process);
+        $this->supervisor->stopProcess($process, $serverOptions['wait']);
     }
 
     /**
@@ -160,7 +160,7 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $this->supervisor->stopProcess($process);
-        $this->supervisor->startProcess($process);
+        $this->supervisor->stopProcess($process, $serverOptions['wait']);
+        $this->supervisor->startProcess($process, $serverOptions['wait']);
     }
 }

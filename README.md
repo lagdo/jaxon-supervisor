@@ -20,11 +20,11 @@ Features
 Documentation
 -------------
 
-0. Install the jaxon library so it bootstraps from a config file and handles ajax requests. Here's the [documentation](https://www.jaxon-php.org/docs/v3x/advanced/bootstrap.html).
+Install the jaxon library so it bootstraps from a config file and handles ajax requests. Here's the [documentation](https://www.jaxon-php.org/docs/v3x/advanced/bootstrap.html).
 
-1. Install this package with Composer. If a [Jaxon plugin](https://www.jaxon-php.org/docs/v3x/plugins/frameworks.html) exists for your framework, you can also install it. It will automate the previous step.
+Install this package with Composer. If a [Jaxon plugin](https://www.jaxon-php.org/docs/v3x/plugins/frameworks.html) exists for your framework, you can also install it. It will automate the previous step.
 
-2. Declare the package and the Supervisor servers in the `app` section of the [Jaxon configuration file](https://www.jaxon-php.org/docs/v3x/advanced/bootstrap.html).
+Declare the package and the Supervisor servers in the `app` section of the [Jaxon configuration file](https://www.jaxon-php.org/docs/v3x/advanced/bootstrap.html).
 
 ```php
     'app' => [
@@ -47,13 +47,38 @@ Documentation
     ],
 ```
 
-3. Insert the CSS and javascript codes in the HTML pages of your application using calls to `jaxon()->getCss()` and `jaxon()->getScript(true)`.
+Use the boolean option `wait` to set if when calling the server, the Supervisor client should wait for operation to terminate before it returns.
 
-4. In the page that displays the dashboard, insert its HTML code with a call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getHtml()`. Two cases are then possible.
+```php
+    'app' => [
+        // Other config options
+        // ...
+        'packages' => [
+            Lagdo\Supervisor\Package::class => [
+                'wait' => false, // Global option for all servers.
+                'servers' => [
+                    'first_server' => [
+                        'url' => 'http://192.168.1.10',
+                        'port' => '9001',
+                        'wait' => true, // Specific option for a given server.
+                    ],
+                    'second_server' => [
+                        'url' => 'http://192.168.1.11',
+                        'port' => '9001',
+                    ],
+                ],
+            ],
+        ],
+    ],
+```
 
-    - If the dashboard is displayed on a dedicated page, make a call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->ready()` when loading the page.
+Insert the CSS and javascript codes in the HTML pages of your application using calls to `jaxon()->getCss()` and `jaxon()->getScript(true)`.
 
-    - If the dashboard is loaded with an Ajax request in a page already displayed, execute the javascript code returned the call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getReadyScript()` when loading the page.
+In the page that displays the dashboard, insert its HTML code with a call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getHtml()`. Two cases are then possible.
+
+- If the dashboard is displayed on a dedicated page, make a call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->ready()` when loading the page.
+
+- If the dashboard is loaded with an Ajax request in a page already displayed, execute the javascript code returned the call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getReadyScript()` when loading the page.
 
 Notes
 -----

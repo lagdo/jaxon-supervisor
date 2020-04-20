@@ -61,6 +61,25 @@ class Client extends CallableClass
     }
 
     /**
+     * Get a given server options
+     *
+     * @param string $server    The server name in the configuration
+     *
+     * @return array
+     */
+    protected function getServerOptions($server)
+    {
+        $options = $this->package->getOptions();
+        $serverOptions = $options['servers'][$server];
+        // Set the "wait" option default value
+        if(!\key_exists('wait', $serverOptions))
+        {
+            $serverOptions['wait'] = \key_exists('wait', $options) ? $options['wait'] : true;
+        }
+        return $serverOptions;
+    }
+
+    /**
      * Refresh data from a server
      *
      * @param string $server    The server name in the configuration
@@ -81,7 +100,7 @@ class Client extends CallableClass
             return $this->response;
         }
 
-        $serverOptions = $options['servers'][$server];
+        $serverOptions = $this->getServerOptions($server);
         try
         {
             $version = $this->client->getVersion($serverOptions);
@@ -135,7 +154,7 @@ class Client extends CallableClass
             return $this->response;
         }
 
-        $serverOptions = $options['servers'][$server];
+        $serverOptions = $this->getServerOptions($server);
         try
         {
             $this->client->startAllProcesses($serverOptions);
@@ -166,7 +185,7 @@ class Client extends CallableClass
             return $this->response;
         }
 
-        $serverOptions = $options['servers'][$server];
+        $serverOptions = $this->getServerOptions($server);
         try
         {
             $this->client->restartAllProcesses($serverOptions);
@@ -197,7 +216,7 @@ class Client extends CallableClass
             return $this->response;
         }
 
-        $serverOptions = $options['servers'][$server];
+        $serverOptions = $this->getServerOptions($server);
         try
         {
             $this->client->stopAllProcesses($serverOptions);
@@ -230,7 +249,7 @@ class Client extends CallableClass
             return $this->response;
         }
 
-        $serverOptions = $options['servers'][$server];
+        $serverOptions = $this->getServerOptions($server);
         try
         {
             $this->client->startProcess($serverOptions, $process);
@@ -263,7 +282,7 @@ class Client extends CallableClass
             return $this->response;
         }
 
-        $serverOptions = $options['servers'][$server];
+        $serverOptions = $this->getServerOptions($server);
         try
         {
             $this->client->restartProcess($serverOptions, $process);
@@ -296,7 +315,7 @@ class Client extends CallableClass
             return $this->response;
         }
 
-        $serverOptions = $options['servers'][$server];
+        $serverOptions = $this->getServerOptions($server);
         try
         {
             $this->client->stopProcess($serverOptions, $process);
