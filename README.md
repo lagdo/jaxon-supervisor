@@ -1,10 +1,10 @@
 A Supervisor dashboard based on the Jaxon ajax library
 ======================================================
 
-There are already several packages that allow to control multiple Supervisor instances from a single dashboard.
+There are already several packages that allow to monitor multiple [Supervisor](http://supervisord.org) instances from a single dashboard.
 However, all these packages are standalone applications, with all the constraints that this implies in terms of installation, configuration, authentication, etc.
 
-This package allows to insert a dashboard for Supervisor into an existing PHP application.
+This package allows to insert a dashboard for [Supervisor](http://supervisord.org) into an existing PHP application.
 Thanks to the [Jaxon library](https://www.jaxon-php.org), it installs and runs in a page of the application, which can be loaded with an HTTP or an Ajax request.
 All its operations are performed with Ajax requests.
 
