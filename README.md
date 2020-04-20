@@ -72,6 +72,31 @@ Use the boolean option `wait` to set if when calling the server, the Supervisor 
     ],
 ```
 
+If the access to a Supervisor server API requires authentification, the credentials can be set with the `auth` option.
+
+```php
+    'app' => [
+        // Other config options
+        // ...
+        'packages' => [
+            Lagdo\Supervisor\Package::class => [
+                'servers' => [
+                    'first_server' => [
+                        'url' => 'http://192.168.1.10',
+                        'port' => '9001',
+                        'auth' => ['first_username', 'first_password'],
+                    ],
+                    'second_server' => [
+                        'url' => 'http://192.168.1.11',
+                        'port' => '9001',
+                        'auth' => ['second_username', 'second_password'],
+                    ],
+                ],
+            ],
+        ],
+    ],
+```
+
 Insert the CSS and javascript codes in the HTML pages of your application using calls to `jaxon()->getCss()` and `jaxon()->getScript(true)`.
 
 In the page that displays the dashboard, insert its HTML code with a call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getHtml()`. Two cases are then possible.

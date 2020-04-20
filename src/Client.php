@@ -16,13 +16,18 @@ use GuzzleHttp\Client as HttpClient;
 class Client
 {
     /**
-     * The class constructor
+     * Create an instance of the Supervisor client
+     *
+     * @param array $serverOptions  The server options in the configuration
+     *
+     * @return Supervisor
      */
-    public function __construct()
+    protected function supervisor(array $serverOptions)
     {
         // Create GuzzleHttp client
         // $httpClient = new HttpClient(['auth' => ['user', 'password']]);
-        $httpClient = new HttpClient();
+        $httpClient = \key_exists('auth', $serverOptions) ?
+            new HttpClient(['auth' => $serverOptions['auth']]) : new HttpClient();
         // Pass the url (null) and the guzzle client to the XmlRpc Client
         $this->rpcClient = new RpcClient(null,
             new HttpAdapterTransport(new Guzzle6HttpAdapter($httpClient))
@@ -30,7 +35,7 @@ class Client
         // Pass the client to the connector
         // See the full list of connectors bellow
         $connector = new XmlRpc($this->rpcClient);
-        $this->supervisor = new Supervisor($connector);
+        return new Supervisor($connector);
     }
 
     /**
@@ -44,7 +49,7 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        return $this->supervisor->getSupervisorVersion();
+        return $this->supervisor($serverOptions)->getSupervisorVersion();
     }
 
     /**
@@ -58,7 +63,7 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $processes = $this->supervisor->getAllProcessInfo();
+        $processes = $this->supervisor($serverOptions)->getAllProcessInfo();
         foreach($processes as $key => $processInfo)
         {
             // Add an id in process info
@@ -86,7 +91,7 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $this->supervisor->startAllProcesses($serverOptions['wait']);
+        $this->supervisor($serverOptions)->startAllProcesses($serverOptions['wait']);
     }
 
     /**
@@ -100,7 +105,7 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $this->supervisor->stopAllProcesses($serverOptions['wait']);
+        $this->supervisor($serverOptions)->stopAllProcesses($serverOptions['wait']);
     }
 
     /**
@@ -114,8 +119,9 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $this->supervisor->stopAllProcesses($serverOptions['wait']);
-        $this->supervisor->startAllProcesses($serverOptions['wait']);
+        $supervisor = $this->supervisor($serverOptions);
+        $supervisor->stopAllProcesses($serverOptions['wait']);
+        $supervisor->startAllProcesses($serverOptions['wait']);
     }
 
     /**
@@ -130,7 +136,7 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $this->supervisor->startProcess($process, $serverOptions['wait']);
+        $this->supervisor($serverOptions)->startProcess($process, $serverOptions['wait']);
     }
 
     /**
@@ -145,7 +151,7 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $this->supervisor->stopProcess($process, $serverOptions['wait']);
+        $this->supervisor($serverOptions)->stopProcess($process, $serverOptions['wait']);
     }
 
     /**
@@ -160,7 +166,8 @@ class Client
     {
         $host = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
         $this->rpcClient->setUri($host);
-        $this->supervisor->stopProcess($process, $serverOptions['wait']);
-        $this->supervisor->startProcess($process, $serverOptions['wait']);
+        $supervisor = $this->supervisor($serverOptions);
+        $supervisor->stopProcess($process, $serverOptions['wait']);
+        $supervisor->startProcess($process, $serverOptions['wait']);
     }
 }
