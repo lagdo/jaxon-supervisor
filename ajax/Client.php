@@ -5,7 +5,7 @@ namespace Lagdo\Supervisor\Ajax;
 use Lagdo\Supervisor\Package as SupervisorPackage;
 use Lagdo\Supervisor\Client as SupervisorClient;
 
-use Jaxon\CallableClass;
+use Jaxon\App\CallableClass;
 use Exception;
 
 /**
