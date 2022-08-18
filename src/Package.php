@@ -81,7 +81,7 @@ class Package extends JaxonPackage
     public function getHtml(): string
     {
         // Add an HTML container block for each server in the config file
-        $servers = array_keys($this->aOptions['servers']);
+        $servers = array_keys($this->getOption('servers', []));
         $divIds = [];
         foreach($servers as $server)
         {

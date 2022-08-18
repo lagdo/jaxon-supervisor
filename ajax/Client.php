@@ -46,9 +46,7 @@ class Client extends CallableClass
      */
     public function refreshAll()
     {
-        $options = $this->package->getOptions();
-        $servers = \array_keys($options['servers']);
-        $actions = [];
+        $servers = $this->package->getOption('servers', []);
         foreach($servers as $server)
         {
             // Add a request for the server in the response
@@ -69,12 +67,12 @@ class Client extends CallableClass
      */
     protected function getServerOptions($server)
     {
-        $options = $this->package->getOptions();
-        $serverOptions = $options['servers'][$server];
+        $servers = $this->package->getOption('servers', []);
+        $serverOptions = $servers[$server];
         // Set the "wait" option default value
-        if(!\key_exists('wait', $serverOptions))
+        if(!isset($serverOptions['wait']))
         {
-            $serverOptions['wait'] = \key_exists('wait', $options) ? $options['wait'] : true;
+            $serverOptions['wait'] = $servers['wait'] ?? true;
         }
         return $serverOptions;
     }
@@ -91,9 +89,7 @@ class Client extends CallableClass
         $server = trim($server);
         // The id of the div element for the Supervisor instance
         $divId = $this->package->divId($server);
-
-        $options = $this->package->getOptions();
-        if(!\key_exists('servers', $options) || !\key_exists($server, $options['servers']))
+        if(!$this->package->getOption("servers.$server", null))
         {
             $this->response->dialog->error("No config entry for server with name $server", 'Error');
             $this->response->html($divId, "No config entry for server with name $server");
@@ -146,8 +142,9 @@ class Client extends CallableClass
     public function startAll($server)
     {
         $server = trim($server);
-        $options = $this->package->getOptions();
-        if(!\key_exists('servers', $options) || !\key_exists($server, $options['servers']))
+        // The id of the div element for the Supervisor instance
+        $divId = $this->package->divId($server);
+        if(!$this->package->getOption("servers.$server", null))
         {
             $this->response->dialog->error("No config entry for server with name $server", 'Error');
             $this->response->html($divId, "No config entry for server with name $server");
@@ -177,8 +174,9 @@ class Client extends CallableClass
     public function restartAll($server)
     {
         $server = trim($server);
-        $options = $this->package->getOptions();
-        if(!\key_exists('servers', $options) || !\key_exists($server, $options['servers']))
+        // The id of the div element for the Supervisor instance
+        $divId = $this->package->divId($server);
+        if(!$this->package->getOption("servers.$server", null))
         {
             $this->response->dialog->error("No config entry for server with name $server", 'Error');
             $this->response->html($divId, "No config entry for server with name $server");
@@ -208,8 +206,9 @@ class Client extends CallableClass
     public function stopAll($server)
     {
         $server = trim($server);
-        $options = $this->package->getOptions();
-        if(!\key_exists('servers', $options) || !\key_exists($server, $options['servers']))
+        // The id of the div element for the Supervisor instance
+        $divId = $this->package->divId($server);
+        if(!$this->package->getOption("servers.$server", null))
         {
             $this->response->dialog->error("No config entry for server with name $server", 'Error');
             $this->response->html($divId, "No config entry for server with name $server");
@@ -239,10 +238,11 @@ class Client extends CallableClass
      */
     public function start($server, $process)
     {
-        $server = trim($server);
         $process = trim($process);
-        $options = $this->package->getOptions();
-        if(!\key_exists('servers', $options) || !\key_exists($server, $options['servers']))
+        $server = trim($server);
+        // The id of the div element for the Supervisor instance
+        $divId = $this->package->divId($server);
+        if(!$this->package->getOption("servers.$server", null))
         {
             $this->response->dialog->error("No config entry for server with name $server", 'Error');
             $this->response->html($divId, "No config entry for server with name $server");
@@ -272,10 +272,11 @@ class Client extends CallableClass
      */
     public function restart($server, $process)
     {
-        $server = trim($server);
         $process = trim($process);
-        $options = $this->package->getOptions();
-        if(!\key_exists('servers', $options) || !\key_exists($server, $options['servers']))
+        $server = trim($server);
+        // The id of the div element for the Supervisor instance
+        $divId = $this->package->divId($server);
+        if(!$this->package->getOption("servers.$server", null))
         {
             $this->response->dialog->error("No config entry for server with name $server", 'Error');
             $this->response->html($divId, "No config entry for server with name $server");
@@ -305,10 +306,11 @@ class Client extends CallableClass
      */
     public function stop($server, $process)
     {
-        $server = trim($server);
         $process = trim($process);
-        $options = $this->package->getOptions();
-        if(!\key_exists('servers', $options) || !\key_exists($server, $options['servers']))
+        $server = trim($server);
+        // The id of the div element for the Supervisor instance
+        $divId = $this->package->divId($server);
+        if(!$this->package->getOption("servers.$server", null))
         {
             $this->response->dialog->error("No config entry for server with name $server", 'Error');
             $this->response->html($divId, "No config entry for server with name $server");
