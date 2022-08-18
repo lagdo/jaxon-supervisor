@@ -15,8 +15,10 @@ return [
         ],
     ],
     'container' => [
-        Lagdo\Supervisor\Client::class => function() {
-            return new Lagdo\Supervisor\Client();
-        },
+        'set' => [
+            Lagdo\Supervisor\Client::class => function() {
+                return new Lagdo\Supervisor\Client();
+            },
+        ],
     ],
 ];
