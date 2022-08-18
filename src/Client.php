@@ -8,7 +8,6 @@ use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Psr7\HttpFactory;
 use Supervisor\Supervisor;
 use Supervisor\Process;
-use Supervisor\Connector\XmlRpc;
 
 /**
  * Supervisor client
@@ -33,7 +32,7 @@ class Client
         $rpcClient = new RpcClient($url, new PsrTransport(new HttpFactory(), $httpClient));
         // Pass the client to the connector
         // See the full list of connectors bellow
-        return new Supervisor(new XmlRpc($rpcClient));
+        return new Supervisor($rpcClient);
     }
 
     /**
