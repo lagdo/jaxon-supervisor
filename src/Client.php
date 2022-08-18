@@ -2,13 +2,13 @@
 
 namespace Lagdo\Supervisor;
 
+use fXmlRpc\Client as RpcClient;
+use fXmlRpc\Transport\HttpAdapterTransport;
+use Http\Adapter\Guzzle7\Client as GuzzleAdapter;
+use GuzzleHttp\Client as HttpClient;
 use Supervisor\Supervisor;
 use Supervisor\Process;
 use Supervisor\Connector\XmlRpc;
-use fXmlRpc\Client as RpcClient;
-use fXmlRpc\Transport\HttpAdapterTransport;
-use Ivory\HttpAdapter\Guzzle6HttpAdapter;
-use GuzzleHttp\Client as HttpClient;
 
 /**
  * Supervisor client
@@ -26,12 +26,12 @@ class Client
     {
         // Create GuzzleHttp client
         // $httpClient = new HttpClient(['auth' => ['user', 'password']]);
-        $httpClient = \key_exists('auth', $serverOptions) ?
+        $httpClient = isset($serverOptions['auth']) ?
             new HttpClient(['auth' => $serverOptions['auth']]) : new HttpClient();
         // Pass the url (null) and the guzzle client to the XmlRpc Client
         $rpcClient = new RpcClient(
             $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2',
-            new HttpAdapterTransport(new Guzzle6HttpAdapter($httpClient))
+            new HttpAdapterTransport(new GuzzleAdapter($httpClient))
         );
         // Pass the client to the connector
         // See the full list of connectors bellow
