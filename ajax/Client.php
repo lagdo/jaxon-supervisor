@@ -46,7 +46,7 @@ class Client extends CallableClass
      */
     public function refreshAll()
     {
-        $servers = $this->package->getOption('servers', []);
+        $servers = array_keys($this->package->getOption('servers', []));
         foreach($servers as $server)
         {
             // Add a request for the server in the response
