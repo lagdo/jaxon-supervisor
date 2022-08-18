@@ -8,6 +8,10 @@ use Lagdo\Supervisor\Client as SupervisorClient;
 use Jaxon\App\CallableClass;
 use Exception;
 
+use function array_keys;
+use function trim;
+use function Jaxon\jq;
+
 /**
  * Supervisor Ajax client
  */
