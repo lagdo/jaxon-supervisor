@@ -6,6 +6,7 @@ use Jaxon\Plugin\AbstractPackage;
 use Lagdo\Supervisor\Ajax\Home;
 
 use function realpath;
+use function Jaxon\cl;
 use function Jaxon\rq;
 
 /**
@@ -52,6 +53,6 @@ class Package extends AbstractPackage
      */
     public function getHtml(): string
     {
-        return '';
+        return cl(Home::class)->html();
     }
 }

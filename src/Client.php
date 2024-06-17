@@ -29,6 +29,11 @@ class Client
     protected $package;
 
     /**
+     * @var Supervisor
+     */
+    protected $connection;
+
+    /**
      * @var string
      */
     protected $server;
@@ -61,14 +66,14 @@ class Client
     /**
      * Slugify a string
      *
-     * @param string $string    The string to be slugified
+     * @param string $server The server name
      *
      * @return string
      */
-    private function getServerId($string): string
+    private function getServerId($server): string
     {
         return 'supervisor-host-' .
-            strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $string), '-'));
+            strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $server), '-'));
     }
 
     /**
@@ -79,6 +84,35 @@ class Client
     public function getServerIds(): array
     {
         return array_map(fn($server) => $this->getServerId($server), $this->getServerNames());
+    }
+
+    /**
+     * Create an instance of the Supervisor client
+     *
+     * @return void
+     */
+    private function createConnection()
+    {
+        // Create GuzzleHttp client
+        // $httpClient = new HttpClient(['auth' => ['user', 'password']]);
+        $httpClient = isset($this->options['auth']) ?
+            new HttpClient(['auth' => $this->options['auth']]) : new HttpClient();
+        // Pass the url (null) and the guzzle client to the XmlRpc Client
+        $url = $this->options['url'] . ':' . $this->options['port'] . '/RPC2';
+        $rpcClient = new RpcClient($url, new PsrTransport(new HttpFactory(), $httpClient));
+        // Pass the client to the connector
+        // See the full list of connectors bellow
+       $this->connection = new Supervisor($rpcClient);
+    }
+
+    /**
+     * Create an instance of the Supervisor client
+     *
+     * @return Supervisor
+     */
+    private function connection(): Supervisor
+    {
+        return $this->connection;
     }
 
     /**
@@ -104,6 +138,7 @@ class Client
         {
             $this->options['wait'] = $servers['wait'] ?? true;
         }
+        $this->createConnection();
         return true;
     }
 
@@ -128,32 +163,31 @@ class Client
     }
 
     /**
-     * Create an instance of the Supervisor client
-     *
-     * @return Supervisor
-     */
-    private function supervisor()
-    {
-        // Create GuzzleHttp client
-        // $httpClient = new HttpClient(['auth' => ['user', 'password']]);
-        $httpClient = isset($this->options['auth']) ?
-            new HttpClient(['auth' => $this->options['auth']]) : new HttpClient();
-        // Pass the url (null) and the guzzle client to the XmlRpc Client
-        $url = $this->options['url'] . ':' . $this->options['port'] . '/RPC2';
-        $rpcClient = new RpcClient($url, new PsrTransport(new HttpFactory(), $httpClient));
-        // Pass the client to the connector
-        // See the full list of connectors bellow
-        return new Supervisor($rpcClient);
-    }
-
-    /**
      * Get the Supervisor version on a given server
      *
      * @return string
      */
     public function getVersion()
     {
-        return $this->supervisor()->getSupervisorVersion();
+        return $this->connection()->getSupervisorVersion();
+    }
+
+    /**
+     * @param array $process
+     *
+     * @return Process
+     */
+    private function makeProcess(array $process): Process
+    {
+        // Add an id in process info
+        $process['id'] = $process['group'] . ':' . $process['name'];
+        // Add the uptime in process info
+        $process['uptime'] = '';
+        if(($pos = strpos($process['description'], 'uptime ')) !== false)
+        {
+            $process['uptime'] = substr($process['description'], $pos + strlen('uptime '));
+        }
+        return new Process($process);
     }
 
     /**
@@ -163,21 +197,9 @@ class Client
      */
     public function getProcesses(): array
     {
-        $processes = $this->supervisor()->getAllProcessInfo();
-        foreach($processes as $key => $processInfo)
-        {
-            // Add an id in process info
-            $processInfo['id'] = $processInfo['group'] . ':' . $processInfo['name'];
-            // Add the uptime in process info
-            $processInfo['uptime'] = '';
-            if(($pos = strpos($processInfo['description'], 'uptime ')) !== false)
-            {
-                $processInfo['uptime'] = substr($processInfo['description'], $pos + strlen('uptime '));
-            }
-
-            $processes[$key] = new Process($processInfo);
-        }
-        return $processes;
+        return array_map(function($processInfo) {
+            return $this->makeProcess($processInfo);
+        }, $this->connection()->getAllProcessInfo());
     }
 
     /**
@@ -187,7 +209,7 @@ class Client
      */
     public function startAllProcesses()
     {
-        $this->supervisor()->startAllProcesses($this->options['wait']);
+        $this->connection()->startAllProcesses($this->options['wait']);
     }
 
     /**
@@ -197,7 +219,7 @@ class Client
      */
     public function stopAllProcesses()
     {
-        $this->supervisor()->stopAllProcesses($this->options['wait']);
+        $this->connection()->stopAllProcesses($this->options['wait']);
     }
 
     /**
@@ -207,9 +229,8 @@ class Client
      */
     public function restartAllProcesses()
     {
-        $supervisor = $this->supervisor();
-        $supervisor->stopAllProcesses($this->options['wait']);
-        $supervisor->startAllProcesses($this->options['wait']);
+        $this->connection()->stopAllProcesses($this->options['wait']);
+        $this->connection()->startAllProcesses($this->options['wait']);
     }
 
     /**
@@ -221,7 +242,7 @@ class Client
      */
     public function getProcess(string $process): ?Process
     {
-        return $this->supervisor()->getProcess($process);
+        return $this->connection()->getProcess($process);
     }
 
     /**
@@ -233,7 +254,7 @@ class Client
      */
     public function startProcess($process)
     {
-        $this->supervisor()->startProcess($process, $this->options['wait']);
+        $this->connection()->startProcess($process, $this->options['wait']);
     }
 
     /**
@@ -245,7 +266,7 @@ class Client
      */
     public function stopProcess($process)
     {
-        $this->supervisor()->stopProcess($process, $this->options['wait']);
+        $this->connection()->stopProcess($process, $this->options['wait']);
     }
 
     /**
@@ -257,8 +278,7 @@ class Client
      */
     public function restartProcess($process)
     {
-        $supervisor = $this->supervisor();
-        $supervisor->stopProcess($process, $this->options['wait']);
-        $supervisor->startProcess($process, $this->options['wait']);
+        $this->connection()->stopProcess($process, $this->options['wait']);
+        $this->connection()->startProcess($process, $this->options['wait']);
     }
 }
