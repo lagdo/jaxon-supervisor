@@ -13,8 +13,8 @@
         "source": "https://github.com/lagdo/jaxon-supervisor"
     },
     "require": {
-        "jaxon-php/jaxon-core": "^4.0",
-        "jaxon-php/jaxon-latte": "^4.0",
+        "jaxon-php/jaxon-core": "v5.x-dev",
+        "jaxon-php/jaxon-latte": "v5.x-dev",
         "supervisorphp/supervisor": "^4.0",
         "php-http/guzzle7-adapter": "*"
     },
@@ -22,6 +22,11 @@
         "psr-4": {
             "Lagdo\\Supervisor\\": "src/",
             "Lagdo\\Supervisor\\Ajax\\": "ajax/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
         }
     }
 }

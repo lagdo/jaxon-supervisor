@@ -50,6 +50,6 @@ jaxon.supervisor = {
     },
     doRefresh: function() {
         jaxon.supervisor.disableRefresh();
-        {$refreshCall|noescape};
+        <?php echo $this->rqHome->refresh() ?>;
     }
 }

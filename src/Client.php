@@ -9,26 +9,137 @@ use GuzzleHttp\Psr7\HttpFactory;
 use Supervisor\Supervisor;
 use Supervisor\Process;
 
+use function array_keys;
+use function array_map;
+use function preg_replace;
+use function strlen;
+use function strpos;
+use function strtolower;
+use function substr;
+use function trim;
+
 /**
  * Supervisor client
  */
 class Client
 {
     /**
-     * Create an instance of the Supervisor client
+     * @var Package
+     */
+    protected $package;
+
+    /**
+     * @var string
+     */
+    protected $server;
+
+    /**
+     * @var array
+     */
+    protected $options;
+
+    /**
+     * The constructor
      *
-     * @param array $serverOptions  The server options in the configuration
+     * @param Package $package    The Supervisor package
+     */
+    public function __construct(Package $package)
+    {
+        $this->package = $package;
+    }
+
+    /**
+     * Get the server names from the package configuration
+     *
+     * @return array
+     */
+    public function getServerNames(): array
+    {
+        return array_keys($this->package->getOption('servers', []));
+    }
+
+    /**
+     * Slugify a string
+     *
+     * @param string $string    The string to be slugified
+     *
+     * @return string
+     */
+    private function getServerId($string): string
+    {
+        return 'supervisor-host-' .
+            strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $string), '-'));
+    }
+
+    /**
+     * Get the div id of the HTML element showing the data from a Supervisor server
+     *
+     * @return array
+     */
+    public function getServerIds(): array
+    {
+        return array_map(fn($server) => $this->getServerId($server), $this->getServerNames());
+    }
+
+    /**
+     * Get a given server options
+     *
+     * @param string $server The server name
+     *
+     * @return bool
+     */
+    public function setCurrentServer(string $server): bool
+    {
+        $this->server = trim($server);
+        $servers = $this->package->getOption('servers', []);
+        if(!isset($servers[$this->server]))
+        {
+            $this->server = '';
+            return false; // Unable to find the server in the config.
+        }
+
+        $this->options = $servers[$this->server];
+        // Set the "wait" option default value
+        if(!isset($this->options['wait']))
+        {
+            $this->options['wait'] = $servers['wait'] ?? true;
+        }
+        return true;
+    }
+
+    /**
+     * Get the current server name
+     *
+     * @return string
+     */
+    public function getCurrentServerName(): string
+    {
+        return $this->server;
+    }
+
+    /**
+     * Get the current server id
+     *
+     * @return string
+     */
+    public function getCurrentServerId(): string
+    {
+        return $this->getServerId($this->server);
+    }
+
+    /**
+     * Create an instance of the Supervisor client
      *
      * @return Supervisor
      */
-    protected function supervisor(array $serverOptions)
+    private function supervisor()
     {
         // Create GuzzleHttp client
         // $httpClient = new HttpClient(['auth' => ['user', 'password']]);
-        $httpClient = isset($serverOptions['auth']) ?
-            new HttpClient(['auth' => $serverOptions['auth']]) : new HttpClient();
+        $httpClient = isset($this->options['auth']) ?
+            new HttpClient(['auth' => $this->options['auth']]) : new HttpClient();
         // Pass the url (null) and the guzzle client to the XmlRpc Client
-        $url = $serverOptions['url'] . ':' . $serverOptions['port'] . '/RPC2';
+        $url = $this->options['url'] . ':' . $this->options['port'] . '/RPC2';
         $rpcClient = new RpcClient($url, new PsrTransport(new HttpFactory(), $httpClient));
         // Pass the client to the connector
         // See the full list of connectors bellow
@@ -38,34 +149,30 @@ class Client
     /**
      * Get the Supervisor version on a given server
      *
-     * @param array $serverOptions  The server options in the configuration
-     *
      * @return string
      */
-    public function getVersion(array $serverOptions)
+    public function getVersion()
     {
-        return $this->supervisor($serverOptions)->getSupervisorVersion();
+        return $this->supervisor()->getSupervisorVersion();
     }
 
     /**
      * Get the processes on a Supervisor server
      *
-     * @param array $serverOptions  The server options in the configuration
-     *
      * @return array<string,Process>
      */
-    public function getProcesses(array $serverOptions)
+    public function getProcesses(): array
     {
-        $processes = $this->supervisor($serverOptions)->getAllProcessInfo();
+        $processes = $this->supervisor()->getAllProcessInfo();
         foreach($processes as $key => $processInfo)
         {
             // Add an id in process info
             $processInfo['id'] = $processInfo['group'] . ':' . $processInfo['name'];
             // Add the uptime in process info
             $processInfo['uptime'] = '';
-            if(($pos = \strpos($processInfo['description'], 'uptime ')) !== false)
+            if(($pos = strpos($processInfo['description'], 'uptime ')) !== false)
             {
-                $processInfo['uptime'] = \substr($processInfo['description'], $pos + \strlen('uptime '));
+                $processInfo['uptime'] = substr($processInfo['description'], $pos + strlen('uptime '));
             }
 
             $processes[$key] = new Process($processInfo);
@@ -76,79 +183,82 @@ class Client
     /**
      * Start all the processes on a Supervisor server
      *
-     * @param array $serverOptions  The server options in the configuration
-     *
      * @return void
      */
-    public function startAllProcesses(array $serverOptions)
+    public function startAllProcesses()
     {
-        $this->supervisor($serverOptions)->startAllProcesses($serverOptions['wait']);
+        $this->supervisor()->startAllProcesses($this->options['wait']);
     }
 
     /**
      * Stop all the processes on a Supervisor server
      *
-     * @param array $serverOptions  The server options in the configuration
-     *
      * @return void
      */
-    public function stopAllProcesses(array $serverOptions)
+    public function stopAllProcesses()
     {
-        $this->supervisor($serverOptions)->stopAllProcesses($serverOptions['wait']);
+        $this->supervisor()->stopAllProcesses($this->options['wait']);
     }
 
     /**
      * Restart all the processes on a Supervisor server
      *
-     * @param array $serverOptions  The server options in the configuration
-     *
      * @return void
      */
-    public function restartAllProcesses(array $serverOptions)
+    public function restartAllProcesses()
     {
-        $supervisor = $this->supervisor($serverOptions);
-        $supervisor->stopAllProcesses($serverOptions['wait']);
-        $supervisor->startAllProcesses($serverOptions['wait']);
+        $supervisor = $this->supervisor();
+        $supervisor->stopAllProcesses($this->options['wait']);
+        $supervisor->startAllProcesses($this->options['wait']);
+    }
+
+    /**
+     * Get a process on a Supervisor server
+     *
+     * @param string $process       The process identifier
+     *
+     * @return Process|null
+     */
+    public function getProcess(string $process): ?Process
+    {
+        return $this->supervisor()->getProcess($process);
     }
 
     /**
      * Start a process on a Supervisor server
      *
-     * @param array $serverOptions  The server options in the configuration
      * @param string $process       The process identifier
      *
      * @return void
      */
-    public function startProcess(array $serverOptions, $process)
+    public function startProcess($process)
     {
-        $this->supervisor($serverOptions)->startProcess($process, $serverOptions['wait']);
+        $this->supervisor()->startProcess($process, $this->options['wait']);
     }
 
     /**
      * Stop a process on a Supervisor server
      *
-     * @param array $serverOptions  The server options in the configuration
      * @param string $process       The process identifier
      *
      * @return void
      */
-    public function stopProcess(array $serverOptions, $process)
+    public function stopProcess($process)
     {
-        $this->supervisor($serverOptions)->stopProcess($process, $serverOptions['wait']);
+        $this->supervisor()->stopProcess($process, $this->options['wait']);
     }
 
     /**
      * Restart a process on a Supervisor server
      *
-     * @param array $serverOptions  The server options in the configuration
      * @param string $process       The process identifier
      *
      * @return void
      */
-    public function restartProcess(array $serverOptions, $process)
+    public function restartProcess($process)
     {
-        $supervisor = $this->supervisor($serverOptions);
-        $supervisor->stopProcess($process, $serverOptions['wait']);
-        $supervisor->startProcess($process, $serverOptions['wait']);
+        $supervisor = $this->supervisor();
+        $supervisor->stopProcess($process, $this->options['wait']);
+        $supervisor->startProcess($process, $this->options['wait']);
     }
 }
