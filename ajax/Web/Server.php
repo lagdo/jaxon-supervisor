@@ -1,8 +1,9 @@
 <?php
 
-namespace Lagdo\Supervisor\Ajax;
+namespace Lagdo\Supervisor\Ajax\Web;
 
 use Jaxon\Response\AjaxResponse;
+use Lagdo\Supervisor\Ajax\Component;
 use Exception;
 
 use function Jaxon\rq;
@@ -10,7 +11,7 @@ use function Jaxon\rq;
 /**
  * Jaxon component for a Supervisor server
  */
-class Server extends BaseComponent
+class Server extends Component
 {
     /**
      * Set the Supervisor server to be displayed.

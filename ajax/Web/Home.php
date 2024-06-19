@@ -1,23 +1,14 @@
 <?php
 
-namespace Lagdo\Supervisor\Ajax;
+namespace Lagdo\Supervisor\Ajax\Web;
 
-use Lagdo\Supervisor\Client;
-use Jaxon\App\Component;
+use Lagdo\Supervisor\Ajax\Component;
 
 /**
  * Home component
  */
 class Home extends Component
 {
-    /**
-     * The constructor
-     *
-     * @param Client $client    The Supervisor client
-     */
-    public function __construct(private Client $client)
-    {}
-
     /**
      * Get the HTML code of the component.
      *

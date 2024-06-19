@@ -3,9 +3,9 @@
 namespace Lagdo\Supervisor\Ajax;
 
 use Lagdo\Supervisor\Client;
-use Jaxon\App\Component;
+use Jaxon\App\Component as BaseComponent;
 
-abstract class BaseComponent extends Component
+abstract class Component extends BaseComponent
 {
     /**
      * The constructor

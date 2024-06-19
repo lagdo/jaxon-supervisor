@@ -2,8 +2,8 @@
 
 return [
     'directories' => [
-        __DIR__ . '/../ajax' => [
-            'namespace' => 'Lagdo\\Supervisor\\Ajax',
+        __DIR__ . '/../ajax/Web' => [
+            'namespace' => 'Lagdo\\Supervisor\\Ajax\\Web',
             'autoload' => false,
         ],
     ],

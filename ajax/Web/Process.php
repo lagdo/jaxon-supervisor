@@ -1,14 +1,16 @@
 <?php
 
-namespace Lagdo\Supervisor\Ajax;
+namespace Lagdo\Supervisor\Ajax\Web;
 
+use Jaxon\Response\AjaxResponse;
+use Lagdo\Supervisor\Ajax\Component;
 use Supervisor\Process as SupervisorProcess;
 use Exception;
 
 /**
  * Jaxon component for a Supervisor process
  */
-class Process extends BaseComponent
+class Process extends Component
 {
     /**
      * @var SupervisorProcess
@@ -49,7 +51,7 @@ class Process extends BaseComponent
      * @param string $server    The server name in the configuration
      * @param string $process       The process identifier
      *
-     * @return \Jaxon\Response\AjaxResponse
+     * @return AjaxResponse
      */
     public function start($server, $process)
     {
@@ -77,7 +79,7 @@ class Process extends BaseComponent
      * @param string $server    The server name in the configuration
      * @param string $process       The process identifier
      *
-     * @return \Jaxon\Response\AjaxResponse
+     * @return AjaxResponse
      */
     public function restart($server, $process)
     {
@@ -105,7 +107,7 @@ class Process extends BaseComponent
      * @param string $server    The server name in the configuration
      * @param string $process       The process identifier
      *
-     * @return \Jaxon\Response\AjaxResponse
+     * @return AjaxResponse
      */
     public function stop($server, $process)
     {

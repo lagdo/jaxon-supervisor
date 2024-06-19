@@ -3,7 +3,7 @@
 namespace Lagdo\Supervisor;
 
 use Jaxon\Plugin\AbstractPackage;
-use Lagdo\Supervisor\Ajax\Home;
+use Lagdo\Supervisor\Ajax\Web\Home;
 
 use function realpath;
 use function Jaxon\cl;
