@@ -1,34 +1,35 @@
-<div class="col-md-12">
+<div class="row">
+  <div class="col-md-12">
     <!-- BEGIN SAMPLE TABLE PORTLET-->
-    <div class="portlet light">
-        <div class="portlet-title">
-            <div class="pull-left" style="margin-top:3px;margin-right:10px;">
-                <button class="btn btn-xs btn-primary" jxn-click="{$rqHome->refresh()|func}">
-                    <span class="glyphicon glyphicon-refresh"></span>
-                </button>
-            </div>
-            <div class="pull-left" style="margin-top:3px;margin-right:10px;">
-                <button class="btn btn-xs btn-success" jxn-click="{$rqHome->enableRefresh()|func}">
-                    <span class="glyphicon glyphicon-play"></span>
-                </button>
-            </div>
-            <div class="pull-left" style="margin-top:3px;margin-right:10px;">
-                <button class="btn btn-xs btn-danger" jxn-click="{$rqHome->disableRefresh()|func}">
-                    <span class="glyphicon glyphicon-stop"></span>
-                </button>
-            </div>
-            <div class="pull-left">
-                <h5 class="d-inline">Refresh (<span id="jaxon-supervisor-refresh-timer">0</span>)</h5>
-            </div>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="pull-left">
+          <h5 class="d-inline">Refresh {* (<span id="jaxon-supervisor-refresh-timer">0</span>) *}</h5>
         </div>
-        <div class="portlet-body" id="main-content">
-            <div class="row">
-{foreach $servers as $server}
-                <div class="col-md-6" jxn-show="{$rqServer|show}" jxn-item="{$server}">
-                </div>
-{/foreach}
-            </div>
+        <div class="pull-left" style="margin-top:3px;margin-right:10px;">
+          <button class="btn btn-xs btn-primary" jxn-click="{$rqHome->refresh()|func}">
+            <span class="glyphicon glyphicon-repeat"></span>
+          </button>
         </div>
+        {* <div class="pull-left" style="margin-top:3px;margin-right:10px;">
+          <button class="btn btn-xs btn-success" jxn-click="{$rqHome->enableRefresh()|func}">
+            <span class="glyphicon glyphicon-play"></span>
+          </button>
+        </div>
+        <div class="pull-left" style="margin-top:3px;margin-right:10px;">
+          <button class="btn btn-xs btn-danger" jxn-click="{$rqHome->disableRefresh()|func}">
+            <span class="glyphicon glyphicon-stop"></span>
+          </button> *}
+        </div>
+      </div>
     </div>
     <!-- END SAMPLE TABLE PORTLET-->
+  </div>
+</div>
+
+<div class="row">
+{foreach $servers as $server}
+  <div class="col-md-6 col-sm-12" jxn-show="{$rqServer|show}" jxn-item="{$server}">
+  </div>
+{/foreach}
 </div>

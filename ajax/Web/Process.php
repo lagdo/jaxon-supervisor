@@ -42,7 +42,8 @@ class Process extends Component
         return $this->view()->render('lagdo::supervisor::views::bootstrap/process', [
             'server' => $this->client->getCurrentServerName(),
             'process' => $this->process,
-        ]);
+            'rqProcess' => $this->rq(),
+        ]) . '';
     }
 
     /**

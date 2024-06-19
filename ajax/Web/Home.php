@@ -35,7 +35,7 @@ class Home extends Component
         foreach($this->client->getServerNames() as $server)
         {
             // Add a request for the server in the response
-            $this->response->exec($this->rq()->showServer($server));
+            $this->response->exec($this->rq(Server::class)->renderServer($server));
         }
 
         // Refresh the statuses after a given interval

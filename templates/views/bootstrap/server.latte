@@ -1,27 +1,32 @@
-                    <table class="table table-bordered table-condensed table-striped">
-                        <thead>
-                            <tr>
-                                <th colspan="4">
-                                    <span>{$server}&nbsp;{$version}</span>
-                                    <span class="pull-right">
-                                        <button class="btn btn-xs btn-danger" jxn-click="{$rqServer->stop($server)|func}">
-                                            <span class="glyphicon glyphicon-stop"></span> Stop all
-                                        </button>
-                                        <button class="btn btn-xs btn-success" jxn-click="{$rqServer->start($server)|func}">
-                                            <span class="glyphicon glyphicon-play"></span> Start all
-                                        </button>
-                                        <button class="btn btn-xs btn-primary" jxn-click="{$rqServer->refresh($server)|func}">
-                                            <span class="glyphicon glyphicon-refresh"></span> Restart all
-                                        </button>
-                                    </span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-5">{$server}&nbsp;{$version}</div>
+          <div class="col-md-7">
+            <div class="pull-right" style="padding-left:5px;">
+              <button class="btn btn-xs btn-danger" jxn-click="{$rqServer->stop($server)|func}">
+                <span class="glyphicon glyphicon-stop"></span> Stop all
+              </button>
+            </div>
+            <div class="pull-right" style="padding-left:5px;">
+              <button class="btn btn-xs btn-success" jxn-click="{$rqServer->start($server)|func}">
+                <span class="glyphicon glyphicon-play"></span> Start all
+              </button>
+            </div>
+            <div class="pull-right" style="padding-left:5px;">
+              <button class="btn btn-xs btn-primary" jxn-click="{$rqServer->refresh($server)|func}">
+                <span class="glyphicon glyphicon-refresh"></span> Restart all
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-body" style="padding:5px 15px;">
 {foreach $processes as $process}
-                            <tr jxn-show="{$rqProcess|show}" jxn-item="{$serverId}-{$process['id']}">
-{$rqProcess->setProcess($process)->html()|noescape}
-                            </tr>
+        <div jxn-show="{$rqProcess|show}" jxn-item="{$serverId}-{$process['id']}" style="margin:5px 0;">
+{$clProcess->setProcess($process)->html()|noescape}
+        </div>
 {/foreach}
-                        </tbody>
-                    </table>
+      </div>
+    </div>

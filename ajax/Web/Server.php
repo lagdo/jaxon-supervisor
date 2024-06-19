@@ -6,8 +6,6 @@ use Jaxon\Response\AjaxResponse;
 use Lagdo\Supervisor\Ajax\Component;
 use Exception;
 
-use function Jaxon\rq;
-
 /**
  * Jaxon component for a Supervisor server
  */
@@ -54,8 +52,27 @@ class Server extends Component
             'serverId' => $this->client->getCurrentServerId(),
             'version' => $version,
             'processes' => $processes,
-            'rqProcess' => rq(Process::class),
-        ]);
+            'rqServer' => $this->rq(),
+            'rqProcess' => $this->rq(Process::class),
+            'clProcess' => $this->cl(Process::class),
+        ]) . '';
+    }
+
+    /**
+     * Render a given server
+     *
+     * @param string $server    The server name in the configuration
+     *
+     * @return AjaxResponse
+     */
+    public function renderServer($server)
+    {
+        if(!$this->setServer($server))
+        {
+            return $this->response;
+        }
+
+        return $this->render();
     }
 
     /**

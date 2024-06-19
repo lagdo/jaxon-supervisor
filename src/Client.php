@@ -242,7 +242,7 @@ class Client
      */
     public function getProcess(string $process): ?Process
     {
-        return $this->connection()->getProcess($process);
+        return $this->makeProcess($this->connection()->getProcessInfo($process));
     }
 
     /**

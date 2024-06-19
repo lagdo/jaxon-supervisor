@@ -1,25 +1,30 @@
-                                <td>{$process['id']}</td>
-                                <td width="100" style="text-align:center">
+          <div class="row">
+            <div class="col-md-5">
+              {$process['id']}
+            </div>
+            <div class="col-md-3" style="text-align:center">
 {if $process->isRunning()}
-                                    <h5 style="margin:0;"><span class="label label-success">{$process['statename']}</span></h5>
+              <h5 style="margin:0;"><span class="label label-success">{$process['statename']}</span></h5>
 {else}
-                                    <h5 style="margin:0;"><span class="label label-default">{$process['statename']}</span></h5>
+              <h5 style="margin:0;"><span class="label label-default">{$process['statename']}</span></h5>
 {/if}
-                                </td>
-                                <td width="70" style="text-align:center">{$process['uptime']}</td>
-                                <td width="80">
-                                    <div class="jaxon-supervisor-process" data-s="{$server}" data-p="{$process['id']}">
+            </div>
+            <div class="col-md-2" style="text-align:center">
+              {$process['uptime']}
+            </div>
+            <div class="col-md-2">
 {if $process->isRunning()}
-                                        <button class="btn btn-xs btn-primary btn-restart" jxn-click="$rqProcess->restart()|func">
-                                            <span class="glyphicon glyphicon-refresh"></span>
-                                        </button>
-                                        <button class="btn btn-xs btn-danger btn-stop" jxn-click="$rqProcess->stop()|func">
-                                            <span class="glyphicon glyphicon-stop"></span>
-                                        </button>
+              <button class="btn btn-xs btn-primary btn-restart" jxn-click="{$rqProcess->restart($server, $process['id'])|func}">
+                <span class="glyphicon glyphicon-refresh"></span>
+              </button>
+              <button class="btn btn-xs btn-danger btn-stop" jxn-click="{$rqProcess->stop($server, $process['id'])|func}">
+                <span class="glyphicon glyphicon-stop"></span>
+              </button>
 {else}
-                                        <button class="btn btn-xs btn-success btn-start" jxn-click="$rqProcess->start()|func">
-                                            <span class="glyphicon glyphicon-play"></span>
-                                        </button>
+              <button class="btn btn-xs btn-success btn-start" jxn-click="{$rqProcess->start($server, $process['id'])|func}">
+                <span class="glyphicon glyphicon-play"></span>
+              </button>
 {/if}
-                                    </div>
-                                </td>
+            </div>
+          </div>
+
