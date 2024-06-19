@@ -39,7 +39,7 @@ class Home extends Component
      */
     public function refresh()
     {
-        $this->display();
+        $this->render();
 
         foreach($this->client->getServerNames() as $server)
         {

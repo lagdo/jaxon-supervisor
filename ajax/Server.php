@@ -74,7 +74,7 @@ class Server extends BaseComponent
         try
         {
             $this->client->startAllProcesses();
-            return $this->display();
+            return $this->render();
         }
         catch(Exception $e)
         {
@@ -101,7 +101,7 @@ class Server extends BaseComponent
         try
         {
             $this->client->restartAllProcesses();
-            return $this->display();
+            return $this->render();
         }
         catch(Exception $e)
         {
@@ -128,7 +128,7 @@ class Server extends BaseComponent
         try
         {
             $this->client->stopAllProcesses();
-            return $this->display();
+            return $this->render();
         }
         catch(Exception $e)
         {

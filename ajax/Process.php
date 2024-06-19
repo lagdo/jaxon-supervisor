@@ -61,7 +61,7 @@ class Process extends BaseComponent
         try
         {
             $this->client->startProcess($process);
-            return $this->setProcess($this->client->getProcess($process))->display();
+            return $this->setProcess($this->client->getProcess($process))->render();
         }
         catch(Exception $e)
         {
@@ -89,7 +89,7 @@ class Process extends BaseComponent
         try
         {
             $this->client->restartProcess($process);
-            return $this->setProcess($this->client->getProcess($process))->display();
+            return $this->setProcess($this->client->getProcess($process))->render();
         }
         catch(Exception $e)
         {
@@ -117,7 +117,7 @@ class Process extends BaseComponent
         try
         {
             $this->client->stopProcess($process);
-            return $this->setProcess($this->client->getProcess($process))->display();
+            return $this->setProcess($this->client->getProcess($process))->render();
         }
         catch(Exception $e)
         {
