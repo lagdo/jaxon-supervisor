@@ -15,9 +15,7 @@ use function Jaxon\rq;
 class Package extends AbstractPackage
 {
     /**
-     * Get the path to the config file
-     *
-     * @return string
+     * @inheritDoc
      */
     public static function config()
     {
@@ -25,9 +23,19 @@ class Package extends AbstractPackage
     }
 
     /**
-     * Get the HTML tags to include javascript code and files into the page
-     *
-     * @return string
+     * @inheritDoc
+     */
+    public function getCss(): string
+    {
+        return '
+<style>
+        ' . $this->view()->render('lagdo::supervisor::codes::style.css') . '
+</style>
+';
+    }
+
+    /**
+     * @inheritDoc
      */
     public function getScript(): string
     {
@@ -37,22 +45,21 @@ class Package extends AbstractPackage
     }
 
     /**
-     * Get the javascript code to execute after page load
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getReadyScript(): string
     {
-        return rq(Home::class)->refresh();
+        return rq(Home::class)->refresh(true);
     }
 
     /**
-     * Get the HTML code of the package home page
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getHtml(): string
     {
-        return cl(Home::class)->html();
+        return $this->view()->render('lagdo::supervisor::views::bootstrap/wrapper', [
+            'rqHome' => rq(Home::class),
+            'clHome' => cl(Home::class),
+        ]);
     }
 }

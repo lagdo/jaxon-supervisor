@@ -1,62 +1,67 @@
-(function(self, jq) {
+/**
+ * Class: jaxon.supervisor
+ */
+
+jaxon.supervisor = {};
+(function(self, query) {
     const refresh = {
-        // The value returned by the javascript setInterval() function
-        value: null,
         // The interval between refresh
         interval: 15,
         // The number of seconds left before refreshing
-        timer: 0,
+        countdown: 0,
+        // The object returned by the javascript setInterval() function
+        timer: null,
     };
 
-    const timerIds = {
-        // The id of the HTML element displaying the timer
-        timer: "jaxon-supervisor-refresh-timer",
-        // The id of the HTML element displaying the do icon
-        do: "jaxon-supervisor-refresh-do",
-        // The id of the HTML element displaying the enable icon
-        enable: "jaxon-supervisor-refresh-enable",
-        // The id of the HTML element displaying the disable icon
-        disable: "jaxon-supervisor-refresh-disable",
+    const selector = {
+        // The HTML element displaying the countdown
+        countdown: "#jaxon-supervisor-refresh-countdown",
+        // The HTML element to be displayed when refresh is enabled
+        enabled: ".jaxon-supervisor-refresh-enabled",
+        // The HTML element to be displayed when refresh is disabled
+        disabled: ".jaxon-supervisor-refresh-disabled",
     };
 
-    self.enableRefresh = () => {
-        if(refresh.value !== null)
-        {
-            return;
-        }
-        refresh.timer = refresh.interval;
-        refresh.value = setInterval(self.updateCounter, 1000);
-
-        // jq(timerIds.do).hide();
-        jq(timerIds.enable).hide();
-        jq(timerIds.disable).show();
-    };
-
-    self.disableRefresh = () => {
-        jq(timerIds.timer).html('0');
-        clearInterval(refresh.value);
-        refresh.value = null;
-
-        // jq(timerIds.do).show();
-        jq(timerIds.enable).show();
-        jq(timerIds.disable).hide();
-    };
-
-    self.updateCounter = () => {
-        const elt = jq(timerIds.timer);
-        if(!elt)
-        {
+    const decrementCoundown = () => {
+        const elt = query.jq(selector.countdown);
+        if (!elt.length) {
             // Stop the timer if the page is not displayed
             self.disableRefresh();
             return;
         }
 
-        elt.html(refresh.timer);
-        --refresh.timer < 0 && self.doRefresh();
-    },
+        elt.html(--refresh.countdown);
+        if (refresh.countdown <= 0) {
+            self.disableRefresh();
+            <?php echo $this->rqHome->refresh(true) ?>;
+        }
+    };
 
-    self.doRefresh = () => {
-        self.disableRefresh();
-        <?php echo $this->rqHome->refresh() ?>;
-    }
-})({}, jaxon.parser.query);
+    self.enableRefresh = () => {
+        if (refresh.timer !== null) {
+            // There's already a timer. Do nothing.
+            return;
+        }
+
+        refresh.countdown = refresh.interval;
+        refresh.timer = setInterval(decrementCoundown, 1000);
+
+        query.jq(selector.countdown).html(refresh.countdown);
+        query.jq(selector.enabled).show();
+        query.jq(selector.disabled).hide();
+    };
+
+    self.disableRefresh = () => {
+        if (refresh.timer === null) {
+            // There's no timer. Do nothing.
+            return;
+        }
+
+        clearInterval(refresh.timer);
+        refresh.timer = null;
+
+        query.jq(selector.countdown).html('0');
+        query.jq(selector.disabled).show();
+        query.jq(selector.enabled).hide();
+    };
+})(jaxon.supervisor, jaxon.parser.query);

@@ -2,6 +2,7 @@
 
 namespace Lagdo\Supervisor\Ajax\Web;
 
+use Jaxon\Response\AjaxResponse;
 use Lagdo\Supervisor\Ajax\Component;
 
 /**
@@ -17,7 +18,6 @@ class Home extends Component
     public function html(): string
     {
         return $this->view()->render('lagdo::supervisor::views::bootstrap/home', [
-            'rqHome' => $this->rq(),
             'rqServer' => $this->rq(Server::class),
             'servers' => $this->client->getServerIds(),
         ]);
@@ -26,9 +26,11 @@ class Home extends Component
     /**
      * Refresh data from all the servers
      *
-     * @return \Jaxon\Response\AjaxResponse
+     * @param bool $enable
+     *
+     * @return AjaxResponse
      */
-    public function refresh()
+    public function refresh(bool $enable)
     {
         $this->render();
 
@@ -38,8 +40,10 @@ class Home extends Component
             $this->response->exec($this->rq(Server::class)->renderServer($server));
         }
 
-        // Refresh the statuses after a given interval
-        $this->response->call('jaxon.supervisor.enableRefresh');
+        if($enable)
+        {
+            $this->response->js('jaxon.supervisor')->enableRefresh();
+        }
         return $this->response;
     }
 }

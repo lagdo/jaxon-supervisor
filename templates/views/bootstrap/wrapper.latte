@@ -1,0 +1,32 @@
+<div>
+  <div class="row">
+    <div class="col-md-12">
+      <!-- BEGIN SAMPLE TABLE PORTLET-->
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="pull-left jaxon-supervisor-refresh-btn">
+            <button class="btn btn-xs btn-primary" jxn-click="{$rqHome->refresh(false)|func}">
+              <span class="glyphicon glyphicon-repeat"></span> Refresh
+              (<span id="jaxon-supervisor-refresh-countdown">0</span>)
+            </button>
+          </div>
+          <div class="pull-left jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-disabled">
+            <button class="btn btn-xs btn-success" jxn-click="{js('jaxon.supervisor')->enableRefresh()|func}">
+              <span class="glyphicon glyphicon-play"></span>
+            </button>
+          </div>
+          <div class="pull-left jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-enabled">
+            <button class="btn btn-xs btn-danger" jxn-click="{js('jaxon.supervisor')->disableRefresh()|func}">
+              <span class="glyphicon glyphicon-stop"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- END SAMPLE TABLE PORTLET-->
+    </div>
+  </div>
+
+  <div class="row" jxn-show="{$rqHome|show}">
+{$clHome->html()|noescape}
+  </div>
+</div>
