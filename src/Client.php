@@ -36,7 +36,7 @@ class Client
     /**
      * @var string
      */
-    protected $server;
+    protected $serverId;
 
     /**
      * @var array
@@ -54,11 +54,11 @@ class Client
     }
 
     /**
-     * Get the server names from the package configuration
+     * Get the server ids from the package configuration
      *
      * @return array
      */
-    public function getServerNames(): array
+    public function getServerIds(): array
     {
         return array_keys($this->package->getOption('servers', []));
     }
@@ -66,28 +66,39 @@ class Client
     /**
      * Slugify a string
      *
-     * @param string $server The server name
+     * @param string $str
      *
      * @return string
      */
-    private function getServerId($server): string
+    private function slugify(string $str): string
     {
-        return 'supervisor-host-' .
-            strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $server), '-'));
+        return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $str), '-'));
     }
 
     /**
-     * Get the div id of the HTML element showing the data from a Supervisor server
+     * Get the id of a Supervisor server component
+     *
+     * @param string $serverId The server key in the package config
+     *
+     * @return string
+     */
+    private function getServerItemId($serverId): string
+    {
+        return 'supervisor-host-' . $this->slugify($serverId);
+    }
+
+    /**
+     * Get the ids of all the Supervisor server components
      *
      * @return array
      */
-    public function getServerIds(): array
+    public function getServerItemIds(): array
     {
-        return array_map(fn($server) => $this->getServerId($server), $this->getServerNames());
+        return array_map(fn($key) => $this->getServerItemId($key), $this->getServerIds());
     }
 
     /**
-     * Create an instance of the Supervisor client
+     * Create a connection to a Supervisor server
      *
      * @return void
      */
@@ -106,33 +117,23 @@ class Client
     }
 
     /**
-     * Create an instance of the Supervisor client
+     * Connect to a server from the package config options.
      *
-     * @return Supervisor
-     */
-    private function connection(): Supervisor
-    {
-        return $this->connection;
-    }
-
-    /**
-     * Get a given server options
-     *
-     * @param string $server The server name
+     * @param string $serverId The server key
      *
      * @return bool
      */
-    public function setCurrentServer(string $server): bool
+    public function connect(string $serverId): bool
     {
-        $this->server = trim($server);
+        $this->serverId = trim($serverId);
         $servers = $this->package->getOption('servers', []);
-        if(!isset($servers[$this->server]))
+        if(!isset($servers[$this->serverId]))
         {
-            $this->server = '';
+            $this->serverId = '';
             return false; // Unable to find the server in the config.
         }
 
-        $this->options = $servers[$this->server];
+        $this->options = $servers[$this->serverId];
         // Set the "wait" option default value
         if(!isset($this->options['wait']))
         {
@@ -143,33 +144,65 @@ class Client
     }
 
     /**
-     * Get the current server name
-     *
-     * @return string
-     */
-    public function getCurrentServerName(): string
-    {
-        return $this->server;
-    }
-
-    /**
      * Get the current server id
      *
      * @return string
      */
     public function getCurrentServerId(): string
     {
-        return $this->getServerId($this->server);
+        return $this->serverId;
     }
 
     /**
-     * Get the Supervisor version on a given server
+     * Get a server name
+     *
+     * @param string $serverId The server key
+     *
+     * @return string
+     */
+    public function getServerName(string $serverId): string
+    {
+        return $this->package->getOption("servers.$serverId.name", $serverId);
+    }
+
+    /**
+     * Get the current server name
+     *
+     * @return string
+     */
+    public function getCurrentServerName(): string
+    {
+        return $this->getServerName($this->serverId);
+    }
+
+    /**
+     * Get the current server component item id
+     *
+     * @return string
+     */
+    public function getCurrentServerItemId(): string
+    {
+        return $this->getServerItemId($this->serverId);
+    }
+
+    /**
+     * Get a process component item id
+     *
+     * @return string
+     */
+    public function getProcessItemId(Process $process): string
+    {
+        return $this->getCurrentServerItemId() . '-' . $process['id'];
+    }
+
+    /**
+     * Get the current Supervisor server version.
      *
      * @return string
      */
     public function getVersion()
     {
-        return $this->connection()->getSupervisorVersion();
+        return $this->connection->getSupervisorVersion();
     }
 
     /**
@@ -199,7 +232,7 @@ class Client
     {
         return array_map(function($processInfo) {
             return $this->makeProcess($processInfo);
-        }, $this->connection()->getAllProcessInfo());
+        }, $this->connection->getAllProcessInfo());
     }
 
     /**
@@ -209,7 +242,7 @@ class Client
      */
     public function startAllProcesses()
     {
-        $this->connection()->startAllProcesses($this->options['wait']);
+        $this->connection->startAllProcesses($this->options['wait']);
     }
 
     /**
@@ -219,7 +252,7 @@ class Client
      */
     public function stopAllProcesses()
     {
-        $this->connection()->stopAllProcesses($this->options['wait']);
+        $this->connection->stopAllProcesses($this->options['wait']);
     }
 
     /**
@@ -229,8 +262,8 @@ class Client
      */
     public function restartAllProcesses()
     {
-        $this->connection()->stopAllProcesses($this->options['wait']);
-        $this->connection()->startAllProcesses($this->options['wait']);
+        $this->connection->stopAllProcesses($this->options['wait']);
+        $this->connection->startAllProcesses($this->options['wait']);
     }
 
     /**
@@ -242,7 +275,7 @@ class Client
      */
     public function getProcess(string $process): ?Process
     {
-        return $this->makeProcess($this->connection()->getProcessInfo($process));
+        return $this->makeProcess($this->connection->getProcessInfo($process));
     }
 
     /**
@@ -254,7 +287,7 @@ class Client
      */
     public function startProcess($process)
     {
-        $this->connection()->startProcess($process, $this->options['wait']);
+        $this->connection->startProcess($process, $this->options['wait']);
     }
 
     /**
@@ -266,7 +299,7 @@ class Client
      */
     public function stopProcess($process)
     {
-        $this->connection()->stopProcess($process, $this->options['wait']);
+        $this->connection->stopProcess($process, $this->options['wait']);
     }
 
     /**
@@ -278,7 +311,7 @@ class Client
      */
     public function restartProcess($process)
     {
-        $this->connection()->stopProcess($process, $this->options['wait']);
-        $this->connection()->startProcess($process, $this->options['wait']);
+        $this->connection->stopProcess($process, $this->options['wait']);
+        $this->connection->startProcess($process, $this->options['wait']);
     }
 }

@@ -6,20 +6,18 @@ use Jaxon\Response\AjaxResponse;
 use Lagdo\Supervisor\Ajax\Component;
 
 /**
- * Home component
+ * Jaxon component for the Supervisor server list
  */
 class Home extends Component
 {
     /**
-     * Get the HTML code of the component.
-     *
-     * @return string
+     * @inheritDoc
      */
     public function html(): string
     {
-        return $this->view()->render('lagdo::supervisor::views::bootstrap/home', [
+        return $this->view()->render('lagdo::supervisor::views::bootstrap/servers', [
             'rqServer' => $this->rq(Server::class),
-            'servers' => $this->client->getServerIds(),
+            'serverItemIds' => $this->client->getServerItemIds(),
         ]);
     }
 
@@ -34,16 +32,13 @@ class Home extends Component
     {
         $this->render();
 
-        foreach($this->client->getServerNames() as $server)
+        foreach($this->client->getServerIds() as $server)
         {
             // Add a request for the server in the response
             $this->response->exec($this->rq(Server::class)->renderServer($server));
         }
 
-        if($enable)
-        {
-            $this->response->js('jaxon.supervisor')->enableRefresh();
-        }
+        $enable && $this->response->js('jaxon.supervisor')->enableRefresh();
         return $this->response;
     }
 }

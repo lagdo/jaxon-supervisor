@@ -15,7 +15,7 @@
             <div class="col-md-2">
 {if $process->isRunning()}
               <button class="btn btn-xs btn-primary btn-restart" jxn-click="{$rqProcess->restart($server, $process['id'])|func}">
-                <span class="glyphicon glyphicon-refresh"></span>
+                <span class="glyphicon glyphicon-repeat"></span>
               </button>
               <button class="btn btn-xs btn-danger btn-stop" jxn-click="{$rqProcess->stop($server, $process['id'])|func}">
                 <span class="glyphicon glyphicon-stop"></span>

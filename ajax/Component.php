@@ -3,7 +3,9 @@
 namespace Lagdo\Supervisor\Ajax;
 
 use Lagdo\Supervisor\Client;
+use Jaxon\Response\AjaxResponse;
 use Jaxon\App\Component as BaseComponent;
+use Exception;
 
 abstract class Component extends BaseComponent
 {
@@ -22,8 +24,21 @@ abstract class Component extends BaseComponent
      *
      * @return bool
      */
-    protected function setServer(string $server): bool
+    protected function connect(string $server): bool
     {
-        return $this->client->setCurrentServer($server);
+        return $this->client->connect($server);
+    }
+
+    /**
+     * @param Exception $e
+     * @param string $message
+     *
+     * @return AjaxResponse
+     */
+    protected function error(Exception $e, string $message): AjaxResponse
+    {
+        $this->logger()->error($e->getMessage());
+        $this->response->dialog->error($message, 'Error');
+        return $this->response;
     }
 }

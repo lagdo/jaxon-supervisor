@@ -20,18 +20,16 @@ class Server extends Component
      */
     protected function setServer(string $server): bool
     {
-        if(!parent::setServer($server))
+        if(!$this->connect($server))
         {
             return false;
         }
-        $this->response->item($this->client->getCurrentServerId());
+        $this->response->item($this->client->getCurrentServerItemId());
         return true;
     }
 
     /**
-     * Get the HTML code of the component.
-     *
-     * @return string
+     * @inheritDoc
      */
     public function html(): string
     {
@@ -48,9 +46,9 @@ class Server extends Component
         }
 
         return $this->view()->render('lagdo::supervisor::views::bootstrap/server', [
-            'server' => $this->client->getCurrentServerName(),
-            'serverId' => $this->client->getCurrentServerId(),
-            'version' => $version,
+            'server' => $this->client->getCurrentServerId(),
+            'serverName' => $this->client->getCurrentServerName(),
+            'serverVersion' => $version,
             'processes' => $processes,
             'rqServer' => $this->rq(),
             'rqProcess' => $this->rq(Process::class),
@@ -65,7 +63,7 @@ class Server extends Component
      *
      * @return AjaxResponse
      */
-    public function renderServer($server)
+    public function renderServer(string $server)
     {
         if(!$this->setServer($server))
         {
@@ -82,7 +80,7 @@ class Server extends Component
      *
      * @return AjaxResponse
      */
-    public function start($server)
+    public function start(string $server)
     {
         if(!$this->setServer($server))
         {
@@ -96,9 +94,7 @@ class Server extends Component
         }
         catch(Exception $e)
         {
-            $this->logger()->error($e->getMessage());
-            $this->response->dialog->error("Unable to start all processes on server $server", 'Error');
-            return $this->response;
+            return $this->error($e, "Unable to start all processes on server $server");
         }
     }
 
@@ -109,7 +105,7 @@ class Server extends Component
      *
      * @return AjaxResponse
      */
-    public function restart($server)
+    public function restart(string $server)
     {
         if(!$this->setServer($server))
         {
@@ -123,9 +119,7 @@ class Server extends Component
         }
         catch(Exception $e)
         {
-            $this->logger()->error($e->getMessage());
-            $this->response->dialog->error("Unable to restart all processes on server $server", 'Error');
-            return $this->response;
+            return $this->error($e, "Unable to restart all processes on server $server");
         }
     }
 
@@ -136,7 +130,7 @@ class Server extends Component
      *
      * @return AjaxResponse
      */
-    public function stop($server)
+    public function stop(string $server)
     {
         if(!$this->setServer($server))
         {
@@ -150,9 +144,7 @@ class Server extends Component
         }
         catch(Exception $e)
         {
-            $this->logger()->error($e->getMessage());
-            $this->response->dialog->error("Unable to stop all processes on server $server", 'Error');
-            return $this->response;
+            return $this->error($e, "Unable to stop all processes on server $server");
         }
     }
 }
