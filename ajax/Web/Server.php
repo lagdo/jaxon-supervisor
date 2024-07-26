@@ -45,15 +45,8 @@ class Server extends Component
             $processes = [];
         }
 
-        return $this->view()->render('lagdo::supervisor::views::bootstrap/server', [
-            'server' => $this->client->getCurrentServerId(),
-            'serverName' => $this->client->getCurrentServerName(),
-            'serverVersion' => $version,
-            'processes' => $processes,
-            'rqServer' => $this->rq(),
-            'rqProcess' => $this->rq(Process::class),
-            'clProcess' => $this->cl(Process::class),
-        ]) . '';
+        return $this->ui->server($this->client->getCurrentServerId(),
+            $this->client->getCurrentServerName(), $version, $processes);
     }
 
     /**

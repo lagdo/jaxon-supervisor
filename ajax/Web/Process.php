@@ -50,11 +50,7 @@ class Process extends Component
      */
     public function html(): string
     {
-        return $this->view()->render('lagdo::supervisor::views::bootstrap/process', [
-            'server' => $this->client->getCurrentServerId(),
-            'process' => $this->process,
-            'rqProcess' => $this->rq(),
-        ]) . '';
+        return $this->ui->process($this->client->getCurrentServerId(), $this->process);
     }
 
     /**

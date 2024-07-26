@@ -13,8 +13,9 @@ abstract class Component extends BaseComponent
      * The constructor
      *
      * @param Client $client The Supervisor client
+     * @param UiBuilderInterface $ui The UI builder
      */
-    public function __construct(protected Client $client)
+    public function __construct(protected Client $client, protected UiBuilderInterface $u)
     {}
 
     /**

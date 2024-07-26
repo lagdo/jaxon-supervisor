@@ -3,10 +3,10 @@
 namespace Lagdo\Supervisor;
 
 use Jaxon\Plugin\AbstractPackage;
+use Lagdo\Supervisor\Ajax\UiBuilderInterface;
 use Lagdo\Supervisor\Ajax\Web\Home;
 
 use function realpath;
-use function Jaxon\cl;
 use function Jaxon\rq;
 
 /**
@@ -14,6 +14,9 @@ use function Jaxon\rq;
  */
 class Package extends AbstractPackage
 {
+    public function __construct(private UiBuilderInterface $ui)
+    {}
+
     /**
      * @inheritDoc
      */
@@ -57,9 +60,6 @@ class Package extends AbstractPackage
      */
     public function getHtml(): string
     {
-        return $this->view()->render('lagdo::supervisor::views::bootstrap/wrapper', [
-            'rqHome' => rq(Home::class),
-            'clHome' => cl(Home::class),
-        ]);
+        return $this->ui->wrapper();
     }
 }

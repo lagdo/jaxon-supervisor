@@ -15,10 +15,7 @@ class Home extends Component
      */
     public function html(): string
     {
-        return $this->view()->render('lagdo::supervisor::views::bootstrap/servers', [
-            'rqServer' => $this->rq(Server::class),
-            'serverItemIds' => $this->client->getServerItemIds(),
-        ]);
+        return $this->ui->servers($this->rq(Server::class));
     }
 
     /**

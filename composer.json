@@ -16,7 +16,9 @@
         "jaxon-php/jaxon-core": "v5.x-dev",
         "jaxon-php/jaxon-latte": "v5.x-dev",
         "supervisorphp/supervisor": "^4.0",
-        "php-http/guzzle7-adapter": "*"
+        "php-http/guzzle7-adapter": "*",
+        "lagdo/ui-builder": "dev-main",
+        "lagdo/jaxon-ui-builder": "dev-main"
     },
     "autoload": {
         "psr-4": {
