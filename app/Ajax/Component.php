@@ -1,10 +1,11 @@
 <?php
 
-namespace Lagdo\Supervisor\Ajax;
+namespace Lagdo\Supervisor\App\Ajax;
 
-use Lagdo\Supervisor\Client;
-use Jaxon\Response\AjaxResponse;
 use Jaxon\App\Component as BaseComponent;
+use Jaxon\Response\AjaxResponse;
+use Lagdo\Supervisor\App\Ui\UiBuilderInterface;
+use Lagdo\Supervisor\Client;
 use Exception;
 
 abstract class Component extends BaseComponent

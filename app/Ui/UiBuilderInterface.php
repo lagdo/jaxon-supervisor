@@ -1,6 +1,6 @@
 <?php
 
-namespace Lagdo\Supervisor\Ajax;
+namespace Lagdo\Supervisor\App\Ui;
 
 use Supervisor\Process as SupervisorProcess;
 

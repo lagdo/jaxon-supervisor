@@ -1,9 +1,9 @@
 <?php
 
-namespace Lagdo\Supervisor\Ajax\Web;
+namespace Lagdo\Supervisor\App\Ajax\Web;
 
 use Jaxon\Response\AjaxResponse;
-use Lagdo\Supervisor\Ajax\Component;
+use Lagdo\Supervisor\App\Ajax\Component;
 use Exception;
 
 /**

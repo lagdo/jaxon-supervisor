@@ -1,10 +1,10 @@
 <?php
 
-namespace Lagdo\Supervisor;
+namespace Lagdo\Supervisor\App;
 
 use Jaxon\Plugin\AbstractPackage;
-use Lagdo\Supervisor\Ajax\UiBuilderInterface;
-use Lagdo\Supervisor\Ajax\Web\Home;
+use Lagdo\Supervisor\App\Ajax\Web\Home;
+use Lagdo\Supervisor\App\Ui\UiBuilderInterface;
 
 use function realpath;
 use function Jaxon\rq;

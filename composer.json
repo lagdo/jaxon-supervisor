@@ -23,7 +23,7 @@
     "autoload": {
         "psr-4": {
             "Lagdo\\Supervisor\\": "src/",
-            "Lagdo\\Supervisor\\Ajax\\": "ajax/"
+            "Lagdo\\Supervisor\\App\\": "app/"
         }
     },
     "config": {
