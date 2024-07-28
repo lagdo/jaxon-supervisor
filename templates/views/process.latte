@@ -8,14 +8,14 @@
             <div class="col-md-3" style="text-align:center">{$process['uptime']}</div>
             <div class="col-md-2">
 {if $process->isRunning()}
-              <button class="btn btn-xs btn-danger btn-stop" {$rqProcess->stop($server, $process['id'])|jxnClick}>
+              <button class="btn btn-xs btn-danger btn-stop" {$rqProcess->stop($server, $process['id'])|jxnClick|noescape}>
                 <span class="glyphicon glyphicon-stop"></span>
               </button>
-              <button class="btn btn-xs btn-primary btn-restart" {$rqProcess->restart($server, $process['id'])|jxnClick}>
+              <button class="btn btn-xs btn-primary btn-restart" {$rqProcess->restart($server, $process['id'])|jxnClick|noescape}>
                 <span class="glyphicon glyphicon-repeat"></span>
               </button>
 {else}
-              <button class="btn btn-xs btn-success btn-start" {$rqProcess->start($server, $process['id'])|jxnClick}>
+              <button class="btn btn-xs btn-success btn-start" {$rqProcess->start($server, $process['id'])|jxnClick|noescape}>
                 <span class="glyphicon glyphicon-play"></span>
               </button>
 {/if}

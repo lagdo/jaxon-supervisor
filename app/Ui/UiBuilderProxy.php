@@ -30,9 +30,9 @@ class UiBuilderProxy implements UiBuilderInterface
             return $this->ui->wrapper();
         }
 
-        return jaxon()->view()->render('lagdo::supervisor::views::bootstrap/wrapper', [
+        return jaxon()->view()->render('lagdo::supervisor::views::wrapper', [
             'rqHome' => rq(Home::class),
-        ]);
+        ]) . '';
     }
 
     /**
@@ -47,17 +47,19 @@ class UiBuilderProxy implements UiBuilderInterface
             return $this->ui->servers($serverItemIds);
         }
 
-        return jaxon()->view()->render('lagdo::supervisor::views::bootstrap/servers', [
+        return jaxon()->view()->render('lagdo::supervisor::views::servers', [
             'rqServer' => rq(Server::class),
             'serverItemIds' => $serverItemIds,
-        ]);
+        ]) . '';
     }
 
     /**
      * Get the HTML code of a simple form
      *
+     * @param string $server
      * @param string $serverName
      * @param string $serverVersion
+     * @param array $processes
      *
      * @return string
      */
@@ -68,7 +70,7 @@ class UiBuilderProxy implements UiBuilderInterface
             return $this->ui->server($server, $serverName, $serverVersion, $processes);
         }
 
-        return jaxon()->view()->render('lagdo::supervisor::views::bootstrap/server', [
+        return jaxon()->view()->render('lagdo::supervisor::views::server', [
             'server' => $server,
             'serverName' => $serverName,
             'serverVersion' => $serverVersion,
@@ -76,10 +78,11 @@ class UiBuilderProxy implements UiBuilderInterface
             'rqServer' => rq(Server::class),
             'rqProcess' => rq(Process::class),
             'clProcess' => cl(Process::class),
-        ]);
+        ]) . '';
     }
 
     /**
+     * @param string $serverName
      * @param SupervisorProcess $process
      *
      * @return string
@@ -91,10 +94,10 @@ class UiBuilderProxy implements UiBuilderInterface
             return $this->ui->process($server, $process);
         }
 
-        return jaxon()->view()->render('lagdo::supervisor::views::bootstrap/process', [
+        return jaxon()->view()->render('lagdo::supervisor::views::process', [
             'server' => $server,
             'process' => $process,
             'rqProcess' => rq(Process::class),
-        ]);
+        ]) . '';
     }
 }

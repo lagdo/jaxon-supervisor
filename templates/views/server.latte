@@ -4,17 +4,17 @@
           <div class="col-md-5">{$serverName}&nbsp;{$serverVersion}</div>
           <div class="col-md-7">
             <div class="pull-right" style="padding-left:5px;">
-              <button class="btn btn-xs btn-danger" {$rqServer->stop($server)|jxnClick}>
+              <button class="btn btn-xs btn-danger" {$rqServer->stop($server)|jxnClick|noescape}>
                 <span class="glyphicon glyphicon-stop"></span> Stop all
               </button>
             </div>
             <div class="pull-right" style="padding-left:5px;">
-              <button class="btn btn-xs btn-success" {$rqServer->start($server)|jxnClick}>
+              <button class="btn btn-xs btn-success" {$rqServer->start($server)|jxnClick|noescape}>
                 <span class="glyphicon glyphicon-play"></span> Start all
               </button>
             </div>
             <div class="pull-right" style="padding-left:5px;">
-              <button class="btn btn-xs btn-primary" {$rqServer->restart($server)|jxnClick}>
+              <button class="btn btn-xs btn-primary" {$rqServer->restart($server)|jxnClick|noescape}>
                 <span class="glyphicon glyphicon-repeat"></span> Restart all
               </button>
             </div>
@@ -25,8 +25,8 @@
       <div class="panel-body" style="padding:5px 15px;">
 {foreach $processes as $process}
 {do $clProcess->setProcess($process)}
-        <div jxn-show="{$rqProcess|show}" jxn-item="{$clProcess->getItemId()}" style="margin:5px 0;">
-{$rqProcess|html}
+        <div style="margin:5px 0;" {jxnShow($rqProcess, $clProcess->getItemId())|noescape}>
+{$rqProcess|jxnHtml}
         </div>
 {/foreach}
       </div>

@@ -6,6 +6,7 @@ use fXmlRpc\Client as RpcClient;
 use fXmlRpc\Transport\PsrTransport;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Psr7\HttpFactory;
+use Lagdo\Supervisor\App\Package;
 use Supervisor\Supervisor;
 use Supervisor\Process;
 

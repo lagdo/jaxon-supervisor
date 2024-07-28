@@ -15,7 +15,7 @@ class Home extends Component
      */
     public function html(): string
     {
-        return $this->ui->servers($this->rq(Server::class));
+        return $this->ui->servers($this->client->getServerItemIds());
     }
 
     /**
