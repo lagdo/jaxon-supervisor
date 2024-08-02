@@ -6,7 +6,7 @@ use Lagdo\Supervisor\App\Ajax\Web\Home;
 use Lagdo\Supervisor\App\Ajax\Web\Process;
 use Lagdo\Supervisor\App\Ajax\Web\Server;
 use Lagdo\UiBuilder\Builder;
-use Lagdo\UiBuilder\BuilderInterface;
+use Lagdo\UiBuilder\Jaxon\Builder as JaxonBuilder;
 use Supervisor\Process as SupervisorProcess;
 
 use function Jaxon\cl;
@@ -16,29 +16,44 @@ use function Jaxon\rq;
 class UiBuilder implements UiBuilderInterface
 {
     /**
-     * @param BuilderInterface $ui
-     */
-    public function __construct(protected BuilderInterface $ui)
-    {}
-
-    /**
      * @return string
      */
     public function wrapper()
     {
         $rqHome = rq(Home::class);
-        $this->ui->clear()
+        $ui = JaxonBuilder::make();
+        $ui
             ->div()
                 ->row()
                     ->col(12)
                         ->panel()
                             ->panelBody()
-                                ->div()->setClass('pull-left jaxon-supervisor-refresh-btn')
+                                ->div()
+                                    ->setClass('pull-left jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-disabled')
+                                    ->button(Builder::BTN_SMALL + Builder::BTN_PRIMARY)
+                                        ->jxnClick(js('jaxon.supervisor')->enableRefresh())
+                                        ->span()
+                                            ->setClass('glyphicon glyphicon-play')
+                                        ->end()
+                                    ->end()
+                                ->end()
+                                ->div()
+                                    ->setClass('pull-left jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-enabled')
+                                    ->button(Builder::BTN_SMALL + Builder::BTN_DANGER)
+                                        ->jxnClick(js('jaxon.supervisor')->disableRefresh())
+                                        ->span()
+                                            ->setClass('glyphicon glyphicon-stop')
+                                        ->end()
+                                    ->end()
+                                ->end()
+                                ->div()
+                                    ->setClass('pull-left jaxon-supervisor-refresh-btn')
                                     ->button(Builder::BTN_SMALL + Builder::BTN_PRIMARY)
                                         ->jxnClick($rqHome->refresh(false))
-                                        ->span()->setClass('glyphicon glyphicon-refresh')
+                                        ->span()
+                                            ->setClass('glyphicon glyphicon-refresh')
                                         ->end()
-                                        ->addText('(')
+                                        ->addText(' Refresh (')
                                         ->span()
                                             ->setId('jaxon-supervisor-refresh-countdown')
                                             ->addText('0')
@@ -46,29 +61,16 @@ class UiBuilder implements UiBuilderInterface
                                         ->addText(')')
                                     ->end()
                                 ->end()
-                                ->div()->setClass('pull-left jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-disabled')
-                                    ->button(Builder::BTN_SMALL + Builder::BTN_PRIMARY)
-                                        ->jxnClick(js('jaxon.supervisor')->enableRefresh())
-                                        ->span()->setClass('glyphicon glyphicon-play')
-                                        ->end()
-                                    ->end()
-                                ->end()
-                                ->div()->setClass('pull-left jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-enabled')
-                                    ->button(Builder::BTN_SMALL + Builder::BTN_DANGER)
-                                        ->jxnClick(js('jaxon.supervisor')->disableRefresh())
-                                        ->span()->setClass('glyphicon glyphicon-stop')
-                                        ->end()
-                                    ->end()
-                                ->end()
                             ->end()
                         ->end()
                     ->end()
                 ->end()
-                ->row()->jxnShow($rqHome)
+                ->row()
+                    ->jxnShow($rqHome)
                     ->jxnHtml($rqHome)
                 ->end()
             ->end();
-        return $this->ui->build();
+        return $ui->build();
     }
 
     /**
@@ -79,14 +81,14 @@ class UiBuilder implements UiBuilderInterface
     public function servers(array $serverItemIds)
     {
         $rqServer = rq(Server::class);
-        $this->ui->clear();
+        $ui = JaxonBuilder::make();
         foreach($serverItemIds as $serverItemId)
         {
-            $this->ui
+            $ui
                 ->col(6, ['class' => 'col-sm-12'])/*->colSm(12)*/->jxnShow($rqServer, $serverItemId)
                 ->end();
         }
-        return $this->ui->build();
+        return $ui->build();
     }
 
     /**
@@ -102,7 +104,8 @@ class UiBuilder implements UiBuilderInterface
         $rqServer = rq(Server::class);
         $rqProcess = rq(Process::class);
         $clProcess = cl(Process::class);
-        $this->ui->clear()
+        $ui = JaxonBuilder::make();
+        $ui
             ->panel()
                 ->panelHeader()
                     ->row()
@@ -141,15 +144,16 @@ class UiBuilder implements UiBuilderInterface
         foreach($processes as $process)
         {
             $clProcess->setProcess($process);
-            $this->ui
-                    ->div(['style' => 'margin:5px 0;'])->jxnShow($rqProcess, $clProcess->getItemId())
+            $ui
+                    ->div(['style' => 'margin:5px 0;'])
+                        ->jxnShow($rqProcess, $clProcess->getItemId())
                         ->addHtml($clProcess->html())
                     ->end();
         }
-        $this->ui
+        $ui
                 ->end()
             ->end();
-        return $this->ui->build();
+        return $ui->build();
     }
 
     /**
@@ -161,14 +165,15 @@ class UiBuilder implements UiBuilderInterface
     {
         $rqProcess = rq(Process::class);
         $processId = $process['id'];
-        $this->ui->clear()
+        $ui = JaxonBuilder::make();
+        $ui
             ->row()
                 ->col(5)
                     ->addText($process['id'])
                 ->end()
                 ->col(2, ['style' => 'text-align:center;'])
                     ->h5(['style' => 'margin:0;'])
-                        ->span(['class' => 'label label-' . $process->isRunning() ? 'success' : 'default'])
+                        ->span(['class' => 'label label-' . ($process->isRunning() ? 'success' : 'default')])
                             ->addText($process['statename'])
                         ->end()
                     ->end()
@@ -179,7 +184,7 @@ class UiBuilder implements UiBuilderInterface
                 ->col(2);
         if($process->isRunning())
         {
-            $this->ui
+            $ui
                     ->div(['class' => 'pull-right', 'style' => 'padding-left:5px;'])/*->pull('right')*/
                         ->button(Builder::BTN_SMALL + Builder::BTN_DANGER, ['class' => 'btn-stop'])
                             ->jxnClick($rqProcess->stop($server, $processId))
@@ -197,7 +202,7 @@ class UiBuilder implements UiBuilderInterface
         }
         else
         {
-            $this->ui
+            $ui
                     ->div(['class' => 'pull-right', 'style' => 'padding-left:5px;'])/*->pull('right')*/
                         ->button(Builder::BTN_SMALL + Builder::BTN_PRIMARY, ['class' => 'btn-start'])
                             ->jxnClick($rqProcess->start($server, $processId))
@@ -206,9 +211,9 @@ class UiBuilder implements UiBuilderInterface
                         ->end()
                     ->end();
         }
-        $this->ui
+        $ui
                 ->end()
             ->end();
-        return $this->ui->build();
+        return $ui->build();
     }
 }

@@ -1,5 +1,12 @@
 <?php
 
+use Lagdo\UiBuilder\Jaxon\Builder as JaxonBuilder;
+use Lagdo\Supervisor\App\Package;
+use Lagdo\Supervisor\App\Ui\UiBuilder;
+use Lagdo\Supervisor\App\Ui\UiBuilderInterface;
+use Lagdo\Supervisor\App\Ui\UiBuilderProxy;
+use Lagdo\Supervisor\Client;
+
 return [
     'directories' => [
         __DIR__ . '/../app/Ajax/Web' => [
@@ -20,20 +27,18 @@ return [
         ],
     ],
     'container' => [
-        'auto' => [
-            Lagdo\Supervisor\App\Ui\UiBuilder::class,
-        ],
         'alias' => [
-            Lagdo\Supervisor\App\Ui\UiBuilderInterface::class => Lagdo\Supervisor\App\Ui\UiBuilderProxy::class,
+            UiBuilderInterface::class => UiBuilderProxy::class,
         ],
         'set' => [
-            Lagdo\Supervisor\App\Ui\UiBuilderProxy::class => function($di) {
-                $uiBuilder = $di->h(Lagdo\UiBuilder\BuilderInterface::class) ?
-                    $di->g(Lagdo\Supervisor\App\Ui\UiBuilder::class) : null;
-                return new Lagdo\Supervisor\App\Ui\UiBuilderProxy($uiBuilder);
+            UiBuilder::class => function() {
+                return JaxonBuilder::isDefined() ? new UiBuilder() : null;
             },
-            Lagdo\Supervisor\Client::class => function($di) {
-                return new Lagdo\Supervisor\Client($di->g(Lagdo\Supervisor\App\Package::class));
+            UiBuilderProxy::class => function($di) {
+                return new UiBuilderProxy($di->g(UiBuilder::class));
+            },
+            Client::class => function($di) {
+                return new Client($di->g(Package::class));
             },
         ],
     ],

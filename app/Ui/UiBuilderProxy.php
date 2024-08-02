@@ -5,7 +5,6 @@ namespace Lagdo\Supervisor\App\Ui;
 use Lagdo\Supervisor\App\Ajax\Web\Home;
 use Lagdo\Supervisor\App\Ajax\Web\Process;
 use Lagdo\Supervisor\App\Ajax\Web\Server;
-use Lagdo\UiBuilder\BuilderInterface;
 use Supervisor\Process as SupervisorProcess;
 
 use function Jaxon\cl;
@@ -15,9 +14,9 @@ use function Jaxon\rq;
 class UiBuilderProxy implements UiBuilderInterface
 {
     /**
-     * @param BuilderInterface $ui
+     * @param UiBuilderInterface|null $ui
      */
-    public function __construct(protected ?BuilderInterface $ui)
+    public function __construct(protected ?UiBuilderInterface $ui)
     {}
 
     /**
