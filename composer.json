@@ -13,15 +13,22 @@
         "source": "https://github.com/lagdo/jaxon-supervisor"
     },
     "require": {
-        "jaxon-php/jaxon-core": "^4.0",
-        "jaxon-php/jaxon-latte": "^4.0",
+        "jaxon-php/jaxon-core": "dev-main",
+        "jaxon-php/jaxon-latte": "dev-main",
         "supervisorphp/supervisor": "^4.0",
-        "php-http/guzzle7-adapter": "*"
+        "php-http/guzzle7-adapter": "*",
+        "lagdo/ui-builder": "dev-main",
+        "lagdo/jaxon-ui-builder": "dev-main"
     },
     "autoload": {
         "psr-4": {
             "Lagdo\\Supervisor\\": "src/",
-            "Lagdo\\Supervisor\\Ajax\\": "ajax/"
+            "Lagdo\\Supervisor\\App\\": "app/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
         }
     }
 }
