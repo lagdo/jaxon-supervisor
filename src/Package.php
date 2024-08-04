@@ -1,6 +1,6 @@
 <?php
 
-namespace Lagdo\Supervisor\App;
+namespace Lagdo\Supervisor;
 
 use Jaxon\Plugin\AbstractPackage;
 use Lagdo\Supervisor\App\Ajax\Web\Home;
