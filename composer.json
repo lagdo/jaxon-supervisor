@@ -13,8 +13,8 @@
         "source": "https://github.com/lagdo/jaxon-supervisor"
     },
     "require": {
-        "jaxon-php/jaxon-core": "v5.x-dev",
-        "jaxon-php/jaxon-latte": "v5.x-dev",
+        "jaxon-php/jaxon-core": "dev-main",
+        "jaxon-php/jaxon-latte": "dev-main",
         "supervisorphp/supervisor": "^4.0",
         "php-http/guzzle7-adapter": "*",
         "lagdo/ui-builder": "dev-main",

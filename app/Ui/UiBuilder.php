@@ -5,8 +5,7 @@ namespace Lagdo\Supervisor\App\Ui;
 use Lagdo\Supervisor\App\Ajax\Web\Home;
 use Lagdo\Supervisor\App\Ajax\Web\Process;
 use Lagdo\Supervisor\App\Ajax\Web\Server;
-use Lagdo\UiBuilder\Builder;
-use Lagdo\UiBuilder\Jaxon\Builder as JaxonBuilder;
+use Lagdo\UiBuilder\Jaxon\Builder;
 use Supervisor\Process as SupervisorProcess;
 
 use function Jaxon\cl;
@@ -21,7 +20,7 @@ class UiBuilder implements UiBuilderInterface
     public function wrapper()
     {
         $rqHome = rq(Home::class);
-        $ui = JaxonBuilder::make();
+        $ui = Builder::new();
         $ui
             ->div()
                 ->row()
@@ -30,7 +29,7 @@ class UiBuilder implements UiBuilderInterface
                             ->panelBody()
                                 ->div()
                                     ->setClass('pull-left jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-disabled')
-                                    ->button(Builder::BTN_SMALL + Builder::BTN_PRIMARY)
+                                    ->button()->btnSmall()->btnSecondary()
                                         ->jxnClick(js('jaxon.supervisor')->enableRefresh())
                                         ->span()
                                             ->setClass('glyphicon glyphicon-play')
@@ -39,7 +38,7 @@ class UiBuilder implements UiBuilderInterface
                                 ->end()
                                 ->div()
                                     ->setClass('pull-left jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-enabled')
-                                    ->button(Builder::BTN_SMALL + Builder::BTN_DANGER)
+                                    ->button()->btnSmall()->btnDanger()
                                         ->jxnClick(js('jaxon.supervisor')->disableRefresh())
                                         ->span()
                                             ->setClass('glyphicon glyphicon-stop')
@@ -48,7 +47,7 @@ class UiBuilder implements UiBuilderInterface
                                 ->end()
                                 ->div()
                                     ->setClass('pull-left jaxon-supervisor-refresh-btn')
-                                    ->button(Builder::BTN_SMALL + Builder::BTN_PRIMARY)
+                                    ->button()->btnSmall()->btnSecondary()
                                         ->jxnClick($rqHome->refresh(false))
                                         ->span()
                                             ->setClass('glyphicon glyphicon-refresh')
@@ -81,7 +80,7 @@ class UiBuilder implements UiBuilderInterface
     public function servers(array $serverItemIds)
     {
         $rqServer = rq(Server::class);
-        $ui = JaxonBuilder::make();
+        $ui = Builder::new();
         foreach($serverItemIds as $serverItemId)
         {
             $ui
@@ -104,7 +103,7 @@ class UiBuilder implements UiBuilderInterface
         $rqServer = rq(Server::class);
         $rqProcess = rq(Process::class);
         $clProcess = cl(Process::class);
-        $ui = JaxonBuilder::make();
+        $ui = Builder::new();
         $ui
             ->panel()
                 ->panelHeader()
@@ -114,7 +113,7 @@ class UiBuilder implements UiBuilderInterface
                         ->end()
                         ->col(7)
                             ->div(['class' => 'pull-right', 'style' => 'padding-left:5px;'])/*->pull('right')*/
-                                ->button(Builder::BTN_SMALL + Builder::BTN_DANGER)
+                                ->button()->btnSmall()->btnDanger()
                                     ->jxnClick($rqServer->stop($server))
                                     ->span()->setClass('glyphicon glyphicon-stop')
                                     ->end()
@@ -122,7 +121,7 @@ class UiBuilder implements UiBuilderInterface
                                 ->end()
                             ->end()
                             ->div(['class' => 'pull-right', 'style' => 'padding-left:5px;'])/*->pull('right')*/
-                                ->button(Builder::BTN_SMALL + Builder::BTN_PRIMARY)
+                                ->button()->btnSmall()->btnPrimary()
                                     ->jxnClick($rqServer->start($server))
                                     ->span()->setClass('glyphicon glyphicon-play')
                                     ->end()
@@ -130,7 +129,7 @@ class UiBuilder implements UiBuilderInterface
                                 ->end()
                             ->end()
                             ->div(['class' => 'pull-right', 'style' => 'padding-left:5px;'])/*->pull('right')*/
-                                ->button(Builder::BTN_SMALL + Builder::BTN_PRIMARY)
+                                ->button()->btnSmall()->btnPrimary()
                                     ->jxnClick($rqServer->restart($server))
                                     ->span()->setClass('glyphicon glyphicon-repeat')
                                     ->end()
@@ -165,11 +164,11 @@ class UiBuilder implements UiBuilderInterface
     {
         $rqProcess = rq(Process::class);
         $processId = $process['id'];
-        $ui = JaxonBuilder::make();
+        $ui = Builder::new();
         $ui
             ->row()
                 ->col(5)
-                    ->addText($process['id'])
+                    ->addText((string)$process['id'])
                 ->end()
                 ->col(2, ['style' => 'text-align:center;'])
                     ->h5(['style' => 'margin:0;'])
@@ -186,14 +185,14 @@ class UiBuilder implements UiBuilderInterface
         {
             $ui
                     ->div(['class' => 'pull-right', 'style' => 'padding-left:5px;'])/*->pull('right')*/
-                        ->button(Builder::BTN_SMALL + Builder::BTN_DANGER, ['class' => 'btn-stop'])
+                        ->button(['class' => 'btn-stop'])->btnSmall()->btnDanger()
                             ->jxnClick($rqProcess->stop($server, $processId))
                             ->span()->setClass('glyphicon glyphicon-stop')
                             ->end()
                         ->end()
                     ->end()
                     ->div(['class' => 'pull-right', 'style' => 'padding-left:5px;'])/*->pull('right')*/
-                        ->button(Builder::BTN_SMALL + Builder::BTN_PRIMARY, ['class' => 'btn-restart'])
+                        ->button(['class' => 'btn-restart'])->btnSmall()->btnPrimary()
                             ->jxnClick($rqProcess->restart($server, $processId))
                             ->span()->setClass('glyphicon glyphicon-repeat')
                             ->end()
@@ -204,7 +203,7 @@ class UiBuilder implements UiBuilderInterface
         {
             $ui
                     ->div(['class' => 'pull-right', 'style' => 'padding-left:5px;'])/*->pull('right')*/
-                        ->button(Builder::BTN_SMALL + Builder::BTN_PRIMARY, ['class' => 'btn-start'])
+                        ->button(['class' => 'btn-start'])->btnSmall()->btnPrimary()
                             ->jxnClick($rqProcess->start($server, $processId))
                             ->span()->setClass('glyphicon glyphicon-play')
                             ->end()

@@ -8,6 +8,7 @@ use Lagdo\Supervisor\App\Ui\UiBuilderProxy;
 use Lagdo\Supervisor\Client;
 
 return [
+    'metadata' => 'annotations',
     'directories' => [
         __DIR__ . '/../app/Ajax/Web' => [
             'namespace' => 'Lagdo\\Supervisor\\App\\Ajax\\Web',
