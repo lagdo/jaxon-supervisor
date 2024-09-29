@@ -63,8 +63,7 @@ class Process extends Component
     private function renderProcess(string $process): AjaxResponse
     {
         $this->setProcess($this->client->getProcess($process));
-        $this->response->item($this->getItemId());
-        return $this->render();
+        return $this->item($this->getItemId())->render();
     }
 
     /**

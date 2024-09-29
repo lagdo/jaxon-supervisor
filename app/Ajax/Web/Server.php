@@ -24,7 +24,8 @@ class Server extends Component
         {
             return false;
         }
-        $this->response->item($this->client->getCurrentServerItemId());
+
+        $this->item($this->client->getCurrentServerItemId());
         return true;
     }
 
