@@ -65,7 +65,7 @@ class UiBuilder implements UiBuilderInterface
                     ->end()
                 ->end()
                 ->row()
-                    ->jxnShow($rqHome)
+                    ->jxnBind($rqHome)
                     ->jxnHtml($rqHome)
                 ->end()
             ->end();
@@ -84,7 +84,7 @@ class UiBuilder implements UiBuilderInterface
         foreach($serverItemIds as $serverItemId)
         {
             $ui
-                ->col(6, ['class' => 'col-sm-12'])/*->colSm(12)*/->jxnShow($rqServer, $serverItemId)
+                ->col(6, ['class' => 'col-sm-12'])/*->colSm(12)*/->jxnBind($rqServer, $serverItemId)
                 ->end();
         }
         return $ui->build();
@@ -145,7 +145,7 @@ class UiBuilder implements UiBuilderInterface
             $clProcess->setProcess($process);
             $ui
                     ->div(['style' => 'margin:5px 0;'])
-                        ->jxnShow($rqProcess, $clProcess->getItemId())
+                        ->jxnBind($rqProcess, $clProcess->getItemId())
                         ->addHtml($clProcess->html())
                     ->end();
         }

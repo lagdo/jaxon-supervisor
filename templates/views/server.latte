@@ -25,7 +25,7 @@
       <div class="panel-body" style="padding:5px 15px;">
 {foreach $processes as $process}
 {do $clProcess->setProcess($process)}
-        <div style="margin:5px 0;" {jxnShow($rqProcess, $clProcess->getItemId())|noescape}>
+        <div style="margin:5px 0;" {jxnBind($rqProcess, $clProcess->getItemId())|noescape}>
 {$rqProcess|jxnHtml}
         </div>
 {/foreach}
