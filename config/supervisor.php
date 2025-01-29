@@ -10,7 +10,8 @@ use Lagdo\Supervisor\Package;
 return [
     'metadata' => 'annotations',
     'directories' => [
-        __DIR__ . '/../app/Ajax/Web' => [
+        [
+            'path' => __DIR__ . '/../app/Ajax/Web',
             'namespace' => 'Lagdo\\Supervisor\\App\\Ajax\\Web',
             'autoload' => false,
         ],
