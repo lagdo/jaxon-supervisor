@@ -3,12 +3,15 @@
 namespace Lagdo\Supervisor\App\Ajax;
 
 use Jaxon\App\Component as BaseComponent;
+use Jaxon\App\Dialog\DialogTrait;
 use Lagdo\Supervisor\App\Ui\UiBuilderInterface;
 use Lagdo\Supervisor\Client;
 use Exception;
 
 abstract class Component extends BaseComponent
 {
+    use DialogTrait;
+
     /**
      * The constructor
      *
@@ -39,6 +42,6 @@ abstract class Component extends BaseComponent
     protected function error(Exception $e, string $message): void
     {
         $this->logger()->error($e->getMessage());
-        $this->response->dialog->error($message, 'Error');
+        $this->alert()->title('Error')->error($message);
     }
 }
