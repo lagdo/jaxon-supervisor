@@ -2,7 +2,6 @@
 
 namespace Lagdo\Supervisor\App\Ajax\Web;
 
-use Jaxon\Response\AjaxResponse;
 use Lagdo\Supervisor\App\Ajax\Component;
 use Supervisor\Process as SupervisorProcess;
 use Exception;
@@ -58,12 +57,12 @@ class Process extends Component
      *
      * @param string $process
      *
-     * @return AjaxResponse
+     * @return void
      */
-    private function renderProcess(string $process): AjaxResponse
+    private function renderProcess(string $process): void
     {
         $this->setProcess($this->client->getProcess($process));
-        return $this->item($this->getItemId())->render();
+        $this->item($this->getItemId())->render();
     }
 
     /**
@@ -72,24 +71,24 @@ class Process extends Component
      * @param string $server    The server name in the configuration
      * @param string $process       The process identifier
      *
-     * @return AjaxResponse
+     * @return void
      */
-    public function start(string $server, string $process)
+    public function start(string $server, string $process): void
     {
         if(!$this->connect($server))
         {
-            return $this->response;
+            return;
         }
 
         $process = trim($process);
         try
         {
             $this->client->startProcess($process);
-            return $this->renderProcess($process);
+            $this->renderProcess($process);
         }
         catch(Exception $e)
         {
-            return $this->error($e, "Unable to start process $process on server $server");
+            $this->error($e, "Unable to start process $process on server $server");
         }
     }
 
@@ -99,24 +98,24 @@ class Process extends Component
      * @param string $server    The server name in the configuration
      * @param string $process       The process identifier
      *
-     * @return AjaxResponse
+     * @return void
      */
-    public function restart(string $server, string $process)
+    public function restart(string $server, string $process): void
     {
         if(!$this->connect($server))
         {
-            return $this->response;
+            return;
         }
 
         $process = trim($process);
         try
         {
             $this->client->restartProcess($process);
-            return $this->renderProcess($process);
+            $this->renderProcess($process);
         }
         catch(Exception $e)
         {
-            return $this->error($e, "Unable to restart process $process on server $server");
+            $this->error($e, "Unable to restart process $process on server $server");
         }
     }
 
@@ -126,24 +125,24 @@ class Process extends Component
      * @param string $server    The server name in the configuration
      * @param string $process       The process identifier
      *
-     * @return AjaxResponse
+     * @return void
      */
-    public function stop(string $server, string $process)
+    public function stop(string $server, string $process): void
     {
         if(!$this->connect($server))
         {
-            return $this->response;
+            return;
         }
 
         $process = trim($process);
         try
         {
             $this->client->stopProcess($process);
-            return $this->renderProcess($process);
+            $this->renderProcess($process);
         }
         catch(Exception $e)
         {
-            return $this->error($e, "Unable to stop process $process on server $server");
+            $this->error($e, "Unable to stop process $process on server $server");
         }
     }
 }

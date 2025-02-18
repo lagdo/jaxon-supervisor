@@ -2,7 +2,6 @@
 
 namespace Lagdo\Supervisor\App\Ajax\Web;
 
-use Jaxon\Response\AjaxResponse;
 use Lagdo\Supervisor\App\Ajax\Component;
 use Exception;
 
@@ -55,16 +54,14 @@ class Server extends Component
      *
      * @param string $server    The server name in the configuration
      *
-     * @return AjaxResponse
+     * @return void
      */
-    public function renderServer(string $server)
+    public function renderServer(string $server): void
     {
-        if(!$this->setServer($server))
+        if($this->setServer($server))
         {
-            return $this->response;
+            $this->render();
         }
-
-        return $this->render();
     }
 
     /**
@@ -72,23 +69,23 @@ class Server extends Component
      *
      * @param string $server    The server name in the configuration
      *
-     * @return AjaxResponse
+     * @return void
      */
-    public function start(string $server)
+    public function start(string $server): void
     {
         if(!$this->setServer($server))
         {
-            return $this->response;
+            return;
         }
 
         try
         {
             $this->client->startAllProcesses();
-            return $this->render();
+            $this->render();
         }
         catch(Exception $e)
         {
-            return $this->error($e, "Unable to start all processes on server $server");
+            $this->error($e, "Unable to start all processes on server $server");
         }
     }
 
@@ -97,23 +94,23 @@ class Server extends Component
      *
      * @param string $server    The server name in the configuration
      *
-     * @return AjaxResponse
+     * @return void
      */
-    public function restart(string $server)
+    public function restart(string $server): void
     {
         if(!$this->setServer($server))
         {
-            return $this->response;
+            return;
         }
 
         try
         {
             $this->client->restartAllProcesses();
-            return $this->render();
+            $this->render();
         }
         catch(Exception $e)
         {
-            return $this->error($e, "Unable to restart all processes on server $server");
+            $this->error($e, "Unable to restart all processes on server $server");
         }
     }
 
@@ -122,23 +119,23 @@ class Server extends Component
      *
      * @param string $server    The server name in the configuration
      *
-     * @return AjaxResponse
+     * @return void
      */
-    public function stop(string $server)
+    public function stop(string $server): void
     {
         if(!$this->setServer($server))
         {
-            return $this->response;
+            return;
         }
 
         try
         {
             $this->client->stopAllProcesses();
-            return $this->render();
+            $this->render();
         }
         catch(Exception $e)
         {
-            return $this->error($e, "Unable to stop all processes on server $server");
+            $this->error($e, "Unable to stop all processes on server $server");
         }
     }
 }

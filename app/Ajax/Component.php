@@ -3,7 +3,6 @@
 namespace Lagdo\Supervisor\App\Ajax;
 
 use Jaxon\App\Component as BaseComponent;
-use Jaxon\Response\AjaxResponse;
 use Lagdo\Supervisor\App\Ui\UiBuilderInterface;
 use Lagdo\Supervisor\Client;
 use Exception;
@@ -35,12 +34,11 @@ abstract class Component extends BaseComponent
      * @param Exception $e
      * @param string $message
      *
-     * @return AjaxResponse
+     * @return void
      */
-    protected function error(Exception $e, string $message): AjaxResponse
+    protected function error(Exception $e, string $message): void
     {
         $this->logger()->error($e->getMessage());
         $this->response->dialog->error($message, 'Error');
-        return $this->response;
     }
 }

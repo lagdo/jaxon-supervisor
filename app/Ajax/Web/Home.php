@@ -2,7 +2,6 @@
 
 namespace Lagdo\Supervisor\App\Ajax\Web;
 
-use Jaxon\Response\AjaxResponse;
 use Lagdo\Supervisor\App\Ajax\Component;
 
 /**
@@ -23,9 +22,9 @@ class Home extends Component
      *
      * @param bool $enable
      *
-     * @return AjaxResponse
+     * @return void
      */
-    public function refresh(bool $enable)
+    public function refresh(bool $enable): void
     {
         $this->render();
 
@@ -36,6 +35,5 @@ class Home extends Component
         }
 
         $enable && $this->response->js('jaxon.supervisor')->enableRefresh();
-        return $this->response;
     }
 }
