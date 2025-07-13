@@ -5,17 +5,17 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="pull-left jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-disabled">
-            <button class="btn btn-xs btn-success" {js('jaxon.supervisor')->enableRefresh()|jxnClick|noescape}>
+            <button class="btn btn-xs btn-success" {jxnClick(jo('jaxon.supervisor')->enableRefresh())}>
               <span class="glyphicon glyphicon-play"></span>
             </button>
           </div>
           <div class="pull-left jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-enabled">
-            <button class="btn btn-xs btn-danger" {js('jaxon.supervisor')->disableRefresh()|jxnClick|noescape}>
+            <button class="btn btn-xs btn-danger" {jxnClick(jo('jaxon.supervisor')->disableRefresh())}>
               <span class="glyphicon glyphicon-stop"></span>
             </button>
           </div>
           <div class="pull-left jaxon-supervisor-refresh-btn">
-            <button class="btn btn-xs btn-primary" {$rqHome->refresh(false)|jxnClick|noescape}>
+            <button class="btn btn-xs btn-primary" {jxnClick($rqHome->refresh(false))}>
               <span class="glyphicon glyphicon-refresh"></span> Refresh
               (<span id="jaxon-supervisor-refresh-countdown">0</span>)
             </button>
@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div class="row" {jxnBind($rqHome)|noescape}>
+  <div class="row" {jxnBind($rqHome)}>
 {jxnHtml($rqHome)}
   </div>
 </div>

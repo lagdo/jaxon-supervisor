@@ -22,7 +22,7 @@ class UiBuilderProxy implements UiBuilderInterface
     /**
      * @return string
      */
-    public function wrapper()
+    public function wrapper(): string
     {
         if($this->ui !== null)
         {
@@ -39,7 +39,7 @@ class UiBuilderProxy implements UiBuilderInterface
      *
      * @return string
      */
-    public function servers(array $serverItemIds)
+    public function servers(array $serverItemIds): string
     {
         if($this->ui !== null)
         {
@@ -62,7 +62,7 @@ class UiBuilderProxy implements UiBuilderInterface
      *
      * @return string
      */
-    public function server(string $server, string $serverName, string $serverVersion, array $processes)
+    public function server(string $server, string $serverName, string $serverVersion, array $processes): string
     {
         if($this->ui !== null)
         {
@@ -86,7 +86,7 @@ class UiBuilderProxy implements UiBuilderInterface
      *
      * @return string
      */
-    public function process(string $server, SupervisorProcess $process)
+    public function process(string $server, SupervisorProcess $process): string
     {
         if($this->ui !== null)
         {

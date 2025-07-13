@@ -1,11 +1,11 @@
 <?php
 
-use Lagdo\UiBuilder\Jaxon\Builder as JaxonBuilder;
 use Lagdo\Supervisor\App\Ui\UiBuilder;
 use Lagdo\Supervisor\App\Ui\UiBuilderInterface;
 use Lagdo\Supervisor\App\Ui\UiBuilderProxy;
 use Lagdo\Supervisor\Client;
 use Lagdo\Supervisor\Package;
+use Lagdo\UiBuilder\BuilderInterface;
 
 return [
     'metadata' => 'annotations',
@@ -33,15 +33,12 @@ return [
             UiBuilderInterface::class => UiBuilderProxy::class,
         ],
         'set' => [
-            UiBuilder::class => function() {
-                return JaxonBuilder::isDefined() ? new UiBuilder() : null;
+            UiBuilder::class => function($di) {
+                $builder = $di->g(BuilderInterface::class);
+                return $builder === null ? null : new UiBuilder($builder);
             },
-            UiBuilderProxy::class => function($di) {
-                return new UiBuilderProxy($di->g(UiBuilder::class));
-            },
-            Client::class => function($di) {
-                return new Client($di->g(Package::class));
-            },
+            UiBuilderProxy::class => fn($di) => new UiBuilderProxy($di->g(UiBuilder::class)),
+            Client::class => fn($di) => new Client($di->g(Package::class)),
         ],
     ],
 ];

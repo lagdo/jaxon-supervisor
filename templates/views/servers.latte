@@ -1,4 +1,4 @@
   {foreach $serverItemIds as $serverItemId}
-    <div class="col-md-6 col-sm-12" {$rqServer|jxnBind:$serverItemId|noescape}>
+    <div class="col-md-6 col-sm-12" {jxnBind($rqServer, $serverItemId)}>
     </div>
   {/foreach}
