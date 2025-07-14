@@ -99,11 +99,7 @@ If the access to a Supervisor server API requires authentification, the credenti
 
 Insert the CSS and javascript codes in the HTML pages of your application using calls to `jaxon()->getCss()` and `jaxon()->getScript(true)`.
 
-In the page that displays the dashboard, insert its HTML code with a call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getHtml()`. Two cases are then possible.
-
-- If the dashboard is displayed on a dedicated page, make a call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->ready()` when loading the page.
-
-- If the dashboard is loaded with an Ajax request in a page already displayed, execute the javascript code returned the call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getReadyScript()` when loading the page.
+In the page that displays the dashboard, insert its HTML code with a call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getHtml()`, and make sure the Javascript code returned by the call to `jaxon()->package(\Lagdo\Supervisor\Package::class)->getReadyScript()` is executed on page load.
 
 Notes
 -----
