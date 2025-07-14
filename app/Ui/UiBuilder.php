@@ -33,29 +33,27 @@ class UiBuilder implements UiBuilderInterface
                         $this->html->panelBody(
                             $this->html->div(
                                 $this->html->button(
-                                    $this->html->span()
-                                    ->setClass('glyphicon glyphicon-play')
+                                    $this->html->i(['class' => 'fa fa-play'])
                                 )
                                 ->small()->success()
-                                ->jxnClick(jo('jaxon.supervisor')->enableRefresh())
+                                ->jxnClick(jo()->jaxon->supervisor->enableRefresh())
                             )
                             ->setStyle('float:left;')
                             ->setClass('jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-disabled'),
                             $this->html->div(
                                 $this->html->button(
-                                    $this->html->span()
-                                    ->setClass('glyphicon glyphicon-stop')
+                                    $this->html->i(['class' => 'fa fa-stop'])
                                 )
                                 ->small()->danger()
-                                ->jxnClick(jo('jaxon.supervisor')->disableRefresh())
+                                ->jxnClick(jo()->jaxon->supervisor->disableRefresh())
                             )
                             ->setStyle('float:left;')
                             ->setClass('jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-enabled'),
                             $this->html->div(
                                 $this->html->button(
+                                    $this->html->i(['class' => 'fa fa-sync']),
                                     $this->html->span()
-                                        ->setClass('glyphicon glyphicon-refresh'),
-                                    $this->html->span(' Refresh ('),
+                                        ->addHtml('&nbsp;Refresh ('),
                                     $this->html->span('0')
                                         ->setId('jaxon-supervisor-refresh-countdown'),
                                     $this->html->span(')')
@@ -123,33 +121,30 @@ class UiBuilder implements UiBuilderInterface
                             $this->html->div(
                                 ['style' => 'float:right; padding-left:5px;'],
                                 $this->html->button(
-                                    $this->html->span()
-                                        ->setClass('glyphicon glyphicon-stop')
+                                    $this->html->i(['class' => 'fa fa-stop']),
+                                    $this->html->span()->addHtml('&nbsp;Stop all')
                                 )
                                 ->small()->danger()
-                                ->addHtml('&nbsp;Stop all')
                                 ->jxnClick($rqServer->stop($server))
                             )
                             /*->pull('right')*/,
                             $this->html->div(
                                 ['style' => 'float:right; padding-left:5px;'],
                                 $this->html->button(
-                                    $this->html->span()
-                                        ->setClass('glyphicon glyphicon-play')
+                                    $this->html->i(['class' => 'fa fa-play']),
+                                    $this->html->span()->addHtml('&nbsp;Start all')
                                 )
-                                ->small()->primary()
-                                ->addHtml('&nbsp;Start all')
+                                ->small()->success()
                                 ->jxnClick($rqServer->start($server))
                             )
                             /*->pull('right')*/,
                             $this->html->div(
                                 ['style' => 'float:right; padding-left:5px;'],
                                 $this->html->button(
-                                    $this->html->span()
-                                        ->setClass('glyphicon glyphicon-repeat')
+                                    $this->html->i(['class' => 'fa fa-redo']),
+                                    $this->html->span()->addHtml('&nbsp;Restart all')
                                 )
                                 ->small()->primary()
-                                ->addHtml('&nbsp;Restart all')
                                 ->jxnClick($rqServer->restart($server))
                             )
                             /*->pull('right')*/
@@ -206,7 +201,7 @@ class UiBuilder implements UiBuilderInterface
                                 ['style' => 'float:right; padding-left:5px;'],
                                 $this->html->button(
                                     ['class' => 'btn-stop'],
-                                    $this->html->span(['class' => 'glyphicon glyphicon-stop'])
+                                    $this->html->i(['class' => 'fa fa-stop'])
                                 )
                                 ->small()->danger()
                                 ->jxnClick($rqProcess->stop($server, $processId))
@@ -216,7 +211,7 @@ class UiBuilder implements UiBuilderInterface
                                 ['style' => 'float:right; padding-left:5px;'],
                                 $this->html->button(
                                     ['class' => 'btn-restart'],
-                                    $this->html->span(['class' => 'glyphicon glyphicon-repeat'])
+                                    $this->html->i(['class' => 'fa fa-redo'])
                                 )
                                 ->small()->primary()
                                 ->jxnClick($rqProcess->restart($server, $processId))
@@ -229,9 +224,9 @@ class UiBuilder implements UiBuilderInterface
                             ['style' => 'float:right; padding-left:5px;'],
                             $this->html->button(
                                 ['class' => 'btn-start'],
-                                $this->html->span(['class' => 'glyphicon glyphicon-play'])
+                                $this->html->i(['class' => 'fa fa-play'])
                             )
-                            ->small()->primary()
+                            ->small()->success()
                             ->jxnClick($rqProcess->start($server, $processId))
                         )
                         /*->pull('right')*/
