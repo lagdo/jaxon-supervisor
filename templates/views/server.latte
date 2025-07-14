@@ -3,18 +3,18 @@
         <div class="row">
           <div class="col-md-5">{$serverName}&nbsp;{$serverVersion}</div>
           <div class="col-md-7">
-            <div class="pull-right" style="padding-left:5px;">
-              <button class="btn btn-xs btn-danger" {jxnClick($rqServer->stop($server))}>
+            <div style="float:right; padding-left:5px;">
+              <button class="btn btn-xs btn-danger" {jxnClick($rqServer->stop($server))|noescape}>
                 <span class="glyphicon glyphicon-stop"></span> Stop all
               </button>
             </div>
-            <div class="pull-right" style="padding-left:5px;">
-              <button class="btn btn-xs btn-success" {jxnClick($rqServer->start($server))}>
+            <div style="float:right; padding-left:5px;">
+              <button class="btn btn-xs btn-success" {jxnClick($rqServer->start($server))|noescape}>
                 <span class="glyphicon glyphicon-play"></span> Start all
               </button>
             </div>
-            <div class="pull-right" style="padding-left:5px;">
-              <button class="btn btn-xs btn-primary" {jxnClick($rqServer->restart($server))}>
+            <div style="float:right; padding-left:5px;">
+              <button class="btn btn-xs btn-primary" {jxnClick($rqServer->restart($server))|noescape}>
                 <span class="glyphicon glyphicon-repeat"></span> Restart all
               </button>
             </div>
@@ -25,8 +25,8 @@
       <div class="panel-body" style="padding:5px 15px;">
 {foreach $processes as $process}
 {do $clProcess->setProcess($process)}
-        <div style="margin:5px 0;" {jxnBind($rqProcess, $clProcess->getItemId())}>
-{jxnHtml($rqProcess)}
+        <div style="margin:5px 0;" {jxnBind($rqProcess, $clProcess->getItemId())|noescape}>
+{jxnHtml($rqProcess)|noescape}
         </div>
 {/foreach}
       </div>

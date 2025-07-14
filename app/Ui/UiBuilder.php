@@ -39,7 +39,8 @@ class UiBuilder implements UiBuilderInterface
                                 ->small()->success()
                                 ->jxnClick(jo('jaxon.supervisor')->enableRefresh())
                             )
-                            ->setClass('pull-left jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-disabled'),
+                            ->setStyle('float:left;')
+                            ->setClass('jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-disabled'),
                             $this->html->div(
                                 $this->html->button(
                                     $this->html->span()
@@ -48,7 +49,8 @@ class UiBuilder implements UiBuilderInterface
                                 ->small()->danger()
                                 ->jxnClick(jo('jaxon.supervisor')->disableRefresh())
                             )
-                            ->setClass('pull-left jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-enabled'),
+                            ->setStyle('float:left;')
+                            ->setClass('jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-enabled'),
                             $this->html->div(
                                 $this->html->button(
                                     $this->html->span()
@@ -61,9 +63,11 @@ class UiBuilder implements UiBuilderInterface
                                 ->small()->primary()
                                 ->jxnClick($rqHome->refresh(false))
                             )
-                            ->setClass('pull-left jaxon-supervisor-refresh-btn')
+                            ->setStyle('float:left;')
+                            ->setClass('jaxon-supervisor-refresh-btn')
                         )
                     )
+                    ->style('default')
                 )
                 ->width(12)
             ),
@@ -85,7 +89,7 @@ class UiBuilder implements UiBuilderInterface
             $this->html->each($serverItemIds, fn($serverItemId) =>
                 $this->html->col()
                     /*->colSm(12)*/
-                    ->setClass('col-sm-12')
+                    //->setClass('col-sm-12')
                     ->width(6)
                     ->jxnBind($rqServer, $serverItemId)
             )
@@ -107,6 +111,7 @@ class UiBuilder implements UiBuilderInterface
         $clProcess = cl(Process::class);
         return $this->html->build(
             $this->html->panel(
+                ['style' => 'margin-top:10px;'],
                 $this->html->panelHeader(
                     $this->html->row(
                         $this->html->col(
@@ -116,7 +121,7 @@ class UiBuilder implements UiBuilderInterface
                         ->width(5),
                         $this->html->col(
                             $this->html->div(
-                                ['class' => 'pull-right', 'style' => 'padding-left:5px;'],
+                                ['style' => 'float:right; padding-left:5px;'],
                                 $this->html->button(
                                     $this->html->span()
                                         ->setClass('glyphicon glyphicon-stop')
@@ -127,7 +132,7 @@ class UiBuilder implements UiBuilderInterface
                             )
                             /*->pull('right')*/,
                             $this->html->div(
-                                ['class' => 'pull-right', 'style' => 'padding-left:5px;'],
+                                ['style' => 'float:right; padding-left:5px;'],
                                 $this->html->button(
                                     $this->html->span()
                                         ->setClass('glyphicon glyphicon-play')
@@ -138,7 +143,7 @@ class UiBuilder implements UiBuilderInterface
                             )
                             /*->pull('right')*/,
                             $this->html->div(
-                                ['class' => 'pull-right', 'style' => 'padding-left:5px;'],
+                                ['style' => 'float:right; padding-left:5px;'],
                                 $this->html->button(
                                     $this->html->span()
                                         ->setClass('glyphicon glyphicon-repeat')
@@ -151,6 +156,7 @@ class UiBuilder implements UiBuilderInterface
                         )
                         ->width(7)
                     )
+                    ->setStyle('width:100%;')
                 ),
                 $this->html->panelBody(
                     ['style' => 'padding:5px 15px;'],
@@ -162,6 +168,7 @@ class UiBuilder implements UiBuilderInterface
                     })
                 )
             )
+            ->style('default')
         );
     }
 
@@ -177,11 +184,9 @@ class UiBuilder implements UiBuilderInterface
         $labelClass = 'label label-' . ($process->isRunning() ? 'success' : 'default');
         return $this->html->build(
             $this->html->row(
-                $this->html->col(
-                    $this->html->span()
-                        ->addText((string)$process['id'])
-                )
-                ->width(5),
+                $this->html->col()
+                    ->width(5)
+                    ->addText((string)$process['id']),
                 $this->html->col(
                     ['style' => 'text-align:center;'],
                     $this->html->h5(
@@ -191,17 +196,14 @@ class UiBuilder implements UiBuilderInterface
                     )
                 )
                 ->width(2),
-                $this->html->col(
-                    ['style' => 'text-align:center;'],
-                    $this->html->span()
-                        ->addText((string)$process['uptime'])
-                )
-                ->width(3),
+                $this->html->col(['style' => 'text-align:center;'],)
+                    ->width(3)
+                    ->addText((string)$process['uptime']),
                 $this->html->col(
                     $this->html->when($process->isRunning(), fn() =>
                         $this->html->list(
                             $this->html->div(
-                                ['class' => 'pull-right', 'style' => 'padding-left:5px;'],
+                                ['style' => 'float:right; padding-left:5px;'],
                                 $this->html->button(
                                     ['class' => 'btn-stop'],
                                     $this->html->span(['class' => 'glyphicon glyphicon-stop'])
@@ -211,7 +213,7 @@ class UiBuilder implements UiBuilderInterface
                             )
                             /*->pull('right')*/,
                             $this->html->div(
-                                ['class' => 'pull-right', 'style' => 'padding-left:5px;'],
+                                ['style' => 'float:right; padding-left:5px;'],
                                 $this->html->button(
                                     ['class' => 'btn-restart'],
                                     $this->html->span(['class' => 'glyphicon glyphicon-repeat'])
@@ -224,7 +226,7 @@ class UiBuilder implements UiBuilderInterface
                     ),
                     $this->html->when(!$process->isRunning(), fn() =>
                         $this->html->div(
-                            ['class' => 'pull-right', 'style' => 'padding-left:5px;'],
+                            ['style' => 'float:right; padding-left:5px;'],
                             $this->html->button(
                                 ['class' => 'btn-start'],
                                 $this->html->span(['class' => 'glyphicon glyphicon-play'])

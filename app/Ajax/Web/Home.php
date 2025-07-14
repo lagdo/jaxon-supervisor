@@ -34,6 +34,6 @@ class Home extends Component
             $this->response->exec($this->rq(Server::class)->renderServer($server));
         }
 
-        $enable && $this->response->js('jaxon.supervisor')->enableRefresh();
+        $enable && $this->response->jo('jaxon.supervisor')->enableRefresh();
     }
 }
