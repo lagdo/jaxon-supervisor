@@ -20,7 +20,7 @@ class Package extends AbstractPackage
     /**
      * @inheritDoc
      */
-    public static function config()
+    public static function config(): string
     {
         return realpath(__DIR__ . '/../config/supervisor.php');
     }
