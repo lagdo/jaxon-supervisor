@@ -36,7 +36,7 @@ class UiBuilder implements UiBuilderInterface
                                     $this->html->i(['class' => 'fa fa-play'])
                                 )
                                 ->small()->success()
-                                ->jxnClick(jo()->jaxon->supervisor->enableRefresh())
+                                ->jxnClick(jo('jaxon.supervisor')->enableRefresh())
                             )
                             ->setStyle('float:left;')
                             ->setClass('jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-disabled'),
@@ -45,7 +45,7 @@ class UiBuilder implements UiBuilderInterface
                                     $this->html->i(['class' => 'fa fa-stop'])
                                 )
                                 ->small()->danger()
-                                ->jxnClick(jo()->jaxon->supervisor->disableRefresh())
+                                ->jxnClick(jo('jaxon.supervisor')->disableRefresh())
                             )
                             ->setStyle('float:left;')
                             ->setClass('jaxon-supervisor-refresh-btn jaxon-supervisor-refresh-enabled'),

@@ -18,6 +18,18 @@ class Home extends Component
     }
 
     /**
+     * Start monitoring the servers
+     *
+     * @return void
+     */
+    public function start(): void
+    {
+        $this->render();
+
+        $this->refresh(true);
+    }
+
+    /**
      * Refresh data from all the servers
      *
      * @param bool $enable
@@ -26,8 +38,6 @@ class Home extends Component
      */
     public function refresh(bool $enable): void
     {
-        $this->render();
-
         foreach($this->client->getServerIds() as $server)
         {
             // Add a request for the server in the response

@@ -52,7 +52,7 @@ class Package extends AbstractPackage
      */
     public function getReadyScript(): string
     {
-        return rq(Home::class)->refresh(true);
+        return rq(Home::class)->start();
     }
 
     /**
